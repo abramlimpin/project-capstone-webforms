@@ -321,7 +321,7 @@
                             </li>
                             <li>
                                 <a runat="server" href="~/News/Add">
-                                    <span>Add a News</span>
+                                    <span>Add a Post</span>
                                 </a>
                             </li>
                         </ul>
@@ -533,9 +533,9 @@
     <section class="content">
         <div class="container-fluid">
             <div class="block-header">
-                <h2>
+                <h1>
                     <asp:ContentPlaceHolder ID="title" runat="server" />
-                </h2>
+                </h1>
             </div>
             <asp:ContentPlaceHolder ID="content" runat="server" />
         </div>
@@ -572,6 +572,10 @@
     <script src='<%= Page.ResolveUrl("~/plugins/jquery-datatable/extensions/export/vfs_fonts.js") %>'></script>
     <script src='<%= Page.ResolveUrl("~/plugins/jquery-datatable/extensions/export/buttons.html5.min.js") %>'></script>
     <script src='<%= Page.ResolveUrl("~/plugins/jquery-datatable/extensions/export/buttons.print.min.js") %>'></script>
+
+    <!-- Ckeditor -->
+    <script src='<%= Page.ResolveUrl("~/plugins/ckeditor/ckeditor.js") %>'></script>
+
     <script>
         $(function () {
             $('.my-table').DataTable({
@@ -598,6 +602,12 @@
                     $(element).parents('.form-group').append(error);
                 }
             });
+        });
+
+        $(function () {
+            //CKEditor
+            CKEDITOR.replaceClass('ckeditor');
+            CKEDITOR.config.height = 300;
         });
     </script>
 </body>

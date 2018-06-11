@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data.SqlClient;
 using System.Linq;
 using System.Web;
 using System.Web.UI;
@@ -23,5 +24,29 @@ public partial class _Default : System.Web.UI.Page
 
         ltCount_Enlist.Text = DB.CountRecords("Enlistment");
         count_enlist.Attributes.Add("data-to", ltCount_Enlist.Text);
+
+        if (!IsPostBack)
+        {
+            GetNews();
+        }
+    }
+
+    void GetNews()
+    {
+        using (SqlConnection con = new SqlConnection(Helper.GetCon()))
+        {
+            con.Open();
+            string query = @"SELECT TOP 5 Title, Post, DateAdded, DateModified
+                FROM News
+                ORDER BY DateAdded DESC;";
+            using (SqlCommand cmd = new SqlCommand(query, con))
+            {
+                using (SqlDataReader data = cmd.ExecuteReader())
+                {
+                    lvNews.DataSource = data;
+                    lvNews.DataBind();
+                }
+            }
+        }
     }
 }

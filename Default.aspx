@@ -58,5 +58,29 @@
             </div>
         </div>
     </div>
+    <div class="row clearfix">
+        <div class="block-header">
+            <h3>Latest News</h3>
+        </div>
+        <asp:ListView ID="lvNews" runat="server">
+            <ItemTemplate>
+                <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12">
+                    <div class="card">
+                        <div class="header">
+                            <h2><%# Eval("Title") %>
+                                <small>
+                                    <span class="pull-left">Date Posted: <%# Eval("DateAdded", "{0: MM/dd/yyyy hh:mm tt}") %></span>
+                                    <span class="pull-right">Last Modified: <%# Eval("DateModified", "{0: MM/dd/yyyy hh:mm tt}") %>
+                                </small>
+                            </h2>
+                        </div>
+                        <div class="body">
+                            <%# Server.HtmlDecode(Eval("Post").ToString()) %>
+                        </div>
+                    </div>
+                </div>
+            </ItemTemplate>
+        </asp:ListView>
+    </div>
 </asp:Content>
 
