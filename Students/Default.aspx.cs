@@ -10,6 +10,7 @@ public partial class Students_Default : System.Web.UI.Page
 {
     protected void Page_Load(object sender, EventArgs e)
     {
+        Helper.ValidateUser();
         Session["module"] = "Students";
         Session["title"] = "Students List";
 

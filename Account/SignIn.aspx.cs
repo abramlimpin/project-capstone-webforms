@@ -45,7 +45,10 @@ public partial class Account_SignIn : System.Web.UI.Page
                             Session["roleid"] = data["RoleID"].ToString();
                         }
                         Helper.Log("Account", "Signed in.");
-                        Response.Redirect("~/");
+                        if (Request.QueryString["url"] == null)
+                            Response.Redirect("~/");
+                        else
+                            Response.Redirect(Request.QueryString["url"].ToString().Replace(".aspx", ""));
                     }
                     else
                     {

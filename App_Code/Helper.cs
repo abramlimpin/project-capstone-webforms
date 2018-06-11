@@ -23,6 +23,14 @@ public class Helper
         //
     }
 
+    public static void ValidateUser()
+    {
+        if (HttpContext.Current.Session["accountno"] == null)
+        {
+            HttpContext.Current.Response.Redirect("~/Account/SignIn?url=" + HttpContext.Current.Request.Url.AbsoluteUri.Replace(".aspx", ""));
+        }
+    }
+
     public static void Log(string logType, string desc)
     {
         using (SqlConnection con = new SqlConnection(Helper.GetCon()))

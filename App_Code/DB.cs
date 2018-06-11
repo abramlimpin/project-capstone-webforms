@@ -66,6 +66,26 @@ public class DB
         }
     }
 
+    public static DataTable GetRoles()
+    {
+        using (SqlConnection con = new SqlConnection(Helper.GetCon()))
+        {
+            con.Open();
+            string query = @"SELECT RoleID, Name FROM Roles";
+            using (SqlCommand cmd = new SqlCommand(query, con))
+            {
+                using (SqlDataReader data = cmd.ExecuteReader())
+                {
+                    using (DataTable dt = new DataTable())
+                    {
+                        dt.Load(data);
+                        return dt;
+                    }
+                }
+            }
+        }
+    }
+
     public static DataTable GetPrograms()
     {
         using (SqlConnection con = new SqlConnection(Helper.GetCon()))

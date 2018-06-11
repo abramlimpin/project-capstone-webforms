@@ -9,6 +9,8 @@ public partial class Account_Default : System.Web.UI.Page
 {
     protected void Page_Load(object sender, EventArgs e)
     {
-
+        Helper.ValidateUser();
+        Session["module"] = "Account";
+        Session["page"] = "My Account";
     }
 }

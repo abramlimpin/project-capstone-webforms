@@ -10,6 +10,7 @@ public partial class News_Add : System.Web.UI.Page
 {
     protected void Page_Load(object sender, EventArgs e)
     {
+        Helper.ValidateUser();
         Session["module"] = "News";
         Session["page"] = "Add a Post";
     }

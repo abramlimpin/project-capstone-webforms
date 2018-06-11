@@ -24,6 +24,7 @@
                         <div class="form-group form-float">
                             <div class="form-line">
                                 <asp:TextBox ID="txtUsername" runat="server" CssClass="form-control" disabled />
+                                <asp:Literal ID="ltAccountNo" runat="server" Visible="false" />
                                 <label class="form-label">InfoNet Account</label>
                             </div>
                         </div>
@@ -45,6 +46,10 @@
                                 <label class="form-label">Last Name</label>
                             </div>
                         </div>
+                        <h2 class="card-inside-title">Role</h2>
+                        <div class="form-group">
+                            <asp:DropDownList ID="ddlRoles" runat="server" CssClass="form-control show-tick" />
+                        </div>
                         <h2 class="card-inside-title">Other Information</h2>
                         <div id="program" runat="server" class="form-group form-float" visible="false">
                             <div class="form-line">
@@ -59,7 +64,7 @@
                             </div>
                         </div>
                         <div class="form-group">
-                            <asp:Button ID="btnUpdate" runat="server" CssClass="btn btn-lg btn-success waves-effect" Text="Update" />
+                            <asp:Button ID="btnUpdate" runat="server" CssClass="btn btn-lg btn-success waves-effect" Text="Update" OnClick="btnUpdate_Click" />
                             <a runat="server" href="~/Users" class="btn btn-lg btn-default waves-effect">Back to List</a>
                             <asp:Button ID="btnReset" runat="server" CssClass="btn btn-lg btn-danger waves-effect pull-right" Text="Reset Password" OnClientClick='return confirm("Reset password?")' />
                         </div>

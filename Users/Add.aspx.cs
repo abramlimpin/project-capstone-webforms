@@ -10,6 +10,7 @@ public partial class Users_Add : System.Web.UI.Page
 {
     protected void Page_Load(object sender, EventArgs e)
     {
+        Helper.ValidateUser();
         Session["module"] = "Users";
         Session["page"] = "Add a User";
 

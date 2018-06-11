@@ -29,6 +29,12 @@
     <!-- JQuery DataTable Css -->
     <link href="~/plugins/jquery-datatable/skin/bootstrap/css/dataTables.bootstrap.css" rel="stylesheet">
 
+    <!-- Bootstrap Material Datetime Picker Css -->
+    <link href="~/plugins/bootstrap-material-datetimepicker/css/bootstrap-material-datetimepicker.css" rel="stylesheet" />
+
+    <!-- Jasny Css -->
+    <link href="~/css/jasny-bootstrap.min.css" rel="stylesheet">
+
     <!-- Custom Css -->
     <link href="~/css/style.css" rel="stylesheet">
 
@@ -213,7 +219,8 @@
             <!-- User Info -->
             <div class="user-info">
                 <div class="image">
-                    <asp:Image ID="imgUser" runat="server" ImageUrl="~/images/user.png" Width="48" Height="48" AlternateText="User" />
+                    <div id="avatar" class="avatar" runat="server">
+                    </div>
                 </div>
                 <div class="info-container">
                     <div class="name" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
@@ -241,7 +248,7 @@
                             <span>Dashboard</span>
                         </a>
                     </li>
-                    <li id="menu_users" runat="server">
+                    <li id="menu_users" runat="server" visible="false">
                         <a href="javascript:void(0);" class="menu-toggle">
                             <i class="material-icons">account_box</i>
                             <span>Users</span>
@@ -259,7 +266,7 @@
                             </li>
                         </ul>
                     </li>
-                    <li id="menu_students" runat="server">
+                    <li id="menu_students" runat="server" visible="false">
                         <a href="javascript:void(0);" class="menu-toggle">
                             <i class="material-icons">school</i>
                             <span>Students</span>
@@ -277,7 +284,7 @@
                             </li>
                         </ul>
                     </li>
-                    <li id="menu_faculty" runat="server">
+                    <li id="menu_faculty" runat="server" visible="false">
                         <a href="javascript:void(0);" class="menu-toggle">
                             <i class="material-icons">face</i>
                             <span>Faculty</span>
@@ -295,7 +302,7 @@
                             </li>
                         </ul>
                     </li>
-                    <li id="menu_enlistment" runat="server">
+                    <li id="menu_enlistment" runat="server" visible="false">
                         <a href="javascript:void(0);" class="menu-toggle">
                             <i class="material-icons">assignment</i>
                             <span>Enlistment</span>
@@ -308,7 +315,7 @@
                             </li>
                         </ul>
                     </li>
-                    <li id="menu_news" runat="server">
+                    <li id="menu_news" runat="server" visible="false">
                         <a href="javascript:void(0);" class="menu-toggle">
                             <i class="material-icons">calendar_today</i>
                             <span>News</span>
@@ -326,7 +333,7 @@
                             </li>
                         </ul>
                     </li>
-                    <li id="menu_reports" runat="server">
+                    <li id="menu_reports" runat="server" visible="false">
                         <a href="javascript:void(0);" class="menu-toggle">
                             <i class="material-icons">book</i>
                             <span>Reports</span>
@@ -344,7 +351,7 @@
                             </li>
                         </ul>
                     </li>
-                    <li id="menu_admin" runat="server">
+                    <li id="menu_admin" runat="server" visible="false">
                         <a href="javascript:void(0);" class="menu-toggle">
                             <i class="material-icons">settings</i>
                             <span>Administration</span>
@@ -356,9 +363,21 @@
                                 </a>
                             </li>
                             <li>
-                                <a runat="server" href="~/Enlistment/">
+                                <a runat="server" href="~/Admin/Roles">
                                     <span>Manage Roles</span>
                                 </a>
+                            </li>
+                            <li>
+                                <a href="javascript:void(0);" class="menu-toggle">
+                                    <span>File Maintenance</span>
+                                </a>
+                                <ul class="ml-menu">
+                                    <li>
+                                        <a runat="server" href="~/Admin/Modules">
+                                            <span>Manage Modules</span>
+                                        </a>
+                                    </li>
+                                </ul>
                             </li>
                         </ul>
                     </li>
@@ -555,6 +574,15 @@
 
     <!-- Jquery Validation Plugin Css -->
     <script src='<%= Page.ResolveUrl("~/plugins/jquery-validation/jquery.validate.js") %>'></script>
+    
+    <!-- Moment Plugin Js -->
+    <script src='<%= Page.ResolveUrl("~/plugins/momentjs/moment.js") %>'></script>
+
+    <!-- Bootstrap Material Datetime Picker Plugin Js -->
+    <script src='<%= Page.ResolveUrl("~/plugins/bootstrap-material-datetimepicker/js/bootstrap-material-datetimepicker.js") %>'></script>
+
+    <!-- Jasny Js -->
+    <script src='<%= Page.ResolveUrl("~/js/jasny-bootstrap.min.js") %>'></script>
 
     <!-- Custom Js -->
     <script src='<%= Page.ResolveUrl("~/js/admin.js") %>'></script>
@@ -605,9 +633,19 @@
         });
 
         $(function () {
+            $('.datepicker').bootstrapMaterialDatePicker({
+                format: 'YYYY-MM-DD',
+                clearButton: true,
+                weekStart: 1,
+                time: false,
+                maxDate: new Date(new Date().setFullYear(new Date().getFullYear() - 16))
+            });
+        });
+
+        $(function () {
             //CKEditor
-            CKEDITOR.replaceClass('ckeditor');
-            CKEDITOR.config.height = 300;
+            CKEDITOR.replace('ckeditor');
+            CKEDITOR.config.height = 400;
         });
     </script>
 </body>

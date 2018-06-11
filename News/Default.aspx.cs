@@ -10,6 +10,7 @@ public partial class News_Default : System.Web.UI.Page
 {
     protected void Page_Load(object sender, EventArgs e)
     {
+        Helper.ValidateUser();
         Session["module"] = "News";
         Session["page"] = "View Records";
 

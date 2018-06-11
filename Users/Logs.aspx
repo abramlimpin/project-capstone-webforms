@@ -43,7 +43,7 @@
                                 <asp:ListView ID="lvRecords" runat="server">
                                     <ItemTemplate>
                                         <tr>
-                                            <td><%# Helper.Decrypt(Eval("AccountNo").ToString() == "0" ? "Administrator" : Eval("AccountNo").ToString()) %></td>
+                                            <td><%# Helper.Decrypt(Eval("AccountNo").ToString()) == "0" ? "Administrator" : Helper.Decrypt(Eval("AccountNo").ToString()) %></td>
                                             <td><%# Helper.Decrypt(Eval("LogType").ToString()) %></td>
                                             <td><%# Helper.Decrypt(Eval("Description").ToString()) %></td>
                                             <td><%# Eval("LogDate") %></td>

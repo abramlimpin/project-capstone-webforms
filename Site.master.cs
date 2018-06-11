@@ -12,6 +12,7 @@ public partial class Site : System.Web.UI.MasterPage
     {
         if (!IsPostBack)
         {
+            ToggleModules();
             ToggleMenu();
             GetUser();
             GetLogs();
@@ -28,7 +29,8 @@ public partial class Site : System.Web.UI.MasterPage
                 string query = "";
                 if (Session["typeid"].ToString() == "1")
                 {
-                    query = @"SELECT p.FirstName + ' ' + p.LastName AS Name, a.Email
+                    query = @"SELECT p.FirstName + ' ' + p.LastName AS Name, a.Email,
+                    p.Image
                     FROM Personnel p
                     INNER JOIN Account a ON p.AccountNo = a.AccountNo
                     WHERE a.AccountNo = @AccountNo";
@@ -39,9 +41,57 @@ public partial class Site : System.Web.UI.MasterPage
                         {
                             while (data.Read())
                             {
+                                string imageURL = data["Image"].ToString() == "" ? "images/user-placeholder.jpg" :
+                                    "images/users/" + data["Image"].ToString();
+                                avatar.Attributes.Add("style", "background-image: url('" + Helper.GetURL() + imageURL + "')");
                                 ltUser.Text = data["Name"].ToString();
                                 ltEmail.Text = data["Email"].ToString();
                             }
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    void ToggleModules()
+    {
+        if (Session["roleid"] != null)
+        {
+            using (SqlConnection con = new SqlConnection(Helper.GetCon()))
+            {
+                con.Open();
+                string query = @"SELECT ModuleID FROM Roles_Modules
+                    WHERE RoleID=@RoleID";
+                using (SqlCommand cmd = new SqlCommand(query, con))
+                {
+                    cmd.Parameters.AddWithValue("@RoleID", Session["roleid"].ToString());
+                    using (SqlDataReader data = cmd.ExecuteReader())
+                    {
+                        while (data.Read())
+                        {
+                            if (data["ModuleID"].ToString() == "1")
+                                menu_users.Visible = true;
+                            if (data["ModuleID"].ToString() == "2")
+                                menu_students.Visible = true;
+                            if (data["ModuleID"].ToString() == "3")
+                                menu_faculty.Visible = true;
+                            //if (data["ModuleID"].ToString() == "4")
+                            //    user.Visible = true;
+                            if (data["ModuleID"].ToString() == "5")
+                                menu_enlistment.Visible = true;
+                            //if (data["ModuleID"].ToString() == "6")
+                            //    ass.Visible = true;
+                            if (data["ModuleID"].ToString() == "7")
+                                menu_reports.Visible = true;
+                            if (data["ModuleID"].ToString() == "8")
+                                menu_news.Visible = true;
+                            if (data["ModuleID"].ToString() == "9")
+                                menu_admin.Visible = true;
+                            if (data["ModuleID"].ToString() == "10")
+                                menu_admin.Visible = true;
+                            if (data["ModuleID"].ToString() == "11")
+                                menu_admin.Visible = true;
                         }
                     }
                 }
@@ -69,6 +119,8 @@ public partial class Site : System.Web.UI.MasterPage
                 menu_reports.Attributes.Add("class", "active");
             else if (Session["module"].ToString() == "Admin")
                 menu_admin.Attributes.Add("class", "active");
+            else
+                menu_home.Attributes.Add("class", "active");
         }
     }
 

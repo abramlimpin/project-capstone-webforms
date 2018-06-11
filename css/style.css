@@ -8053,3 +8053,11 @@ html.ie11 .bs-searchbox .form-control {
 td .dataTables_empty {
  text-align:center;
 }
+
+.avatar {
+    height: 48px;
+    width: 48px;
+    border-radius: 50%;
+    background-position: center;
+    background-size: cover;
+}
