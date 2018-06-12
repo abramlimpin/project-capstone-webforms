@@ -7,30 +7,33 @@ using System.Web;
 using System.Web.UI;
 using System.Web.UI.WebControls;
 
-public partial class Account_Profile : System.Web.UI.Page
+public partial class Faculty_Details : System.Web.UI.Page
 {
     protected void Page_Load(object sender, EventArgs e)
     {
         Helper.ValidateUser();
-        Session["module"] = "Account";
-        Session["page"] = "My Account";
+        Session["module"] = "Faculty";
+        Session["page"] = "Faculty Details";
 
-        if (Session["update"] != null)
-        {
-            update.Visible = true;
-            Session.Remove("update");
-        }
+        if (Request.QueryString["no"] == null)
+            Response.Redirect("~/Faculty");
         else
         {
-            update.Visible = false;
-        }
-        if (!IsPostBack)
-        {
-            GetInfo();
+            Guid code = new Guid();
+            bool validCode = Guid.TryParse(Request.QueryString["no"].ToString(), out code);
+            if (validCode)
+            {
+                if (!IsPostBack)
+                {
+                    GetInfo(code);
+                }
+            }
+            else
+                Response.Redirect("~/Faculty");
         }
     }
 
-    void GetInfo()
+    void GetInfo(Guid code)
     {
         using (SqlConnection con = new SqlConnection(Helper.GetCon()))
         {
@@ -38,31 +41,21 @@ public partial class Account_Profile : System.Web.UI.Page
             string query = "";
             if (Session["typeid"].ToString() == "1")
             {
-                query = @"SELECT p.Image, p.AccountNo, a.Email,
-                    p.FirstName, p.MiddleName, p.LastName, p.Nickname,
-                    p.Birthdate, p.Gender
-                    FROM Account a 
-                    INNER JOIN Personnel p ON a.AccountNo = p.AccountNo
-                    WHERE a.AccountNo=@AccountNo";
-            }
-            else if (Session["typeid"].ToString() == "2" ||
-                Session["typeid"].ToString() == "3")
-            {
                 query = @"SELECT f.Image, f.AccountNo, a.Email,
                     f.FirstName, f.MiddleName, f.LastName, f.Nickname,
                     f.Birthdate, f.Gender
                     FROM Account a 
                     INNER JOIN Faculty f ON a.AccountNo = f.AccountNo
-                    WHERE a.AccountNo=@AccountNo";
+                    WHERE a.Code = @Code";
             }
             using (SqlCommand cmd = new SqlCommand(query, con))
             {
-                cmd.Parameters.AddWithValue("@AccountNo", Session["accountno"].ToString());
+                cmd.Parameters.AddWithValue("@Code", code);
                 using (SqlDataReader data = cmd.ExecuteReader())
                 {
                     while (data.Read())
                     {
-                        imgUser.ImageUrl = data["Image"].ToString() == "" ? "~/images/user-placeholder.jpg" : 
+                        imgUser.ImageUrl = data["Image"].ToString() == "" ? "~/images/user-placeholder.jpg" :
                             "~/images/users/" + data["Image"].ToString();
                         Session["image"] = data["Image"].ToString();
                         txtUsername.Text = data["AccountNo"].ToString();
@@ -94,10 +87,10 @@ public partial class Account_Profile : System.Web.UI.Page
             string query = "";
             if (Session["typeid"].ToString() == "1")
             {
-                query = @"UPDATE Personnel SET Image=@Image, MiddleName=@MiddleName,
+                query = @"UPDATE Faculty SET Image=@Image, MiddleName=@MiddleName,
                     Nickname=@Nickname,
                     Birthdate=@Birthdate, Gender=@Gender, DateModified=@DateModified
-                    WHERE AccountNo=@AccountNo";
+                    WHERE Account=@AccountNo";
             }
             using (SqlCommand cmd = new SqlCommand(query, con))
             {
@@ -118,17 +111,37 @@ public partial class Account_Profile : System.Web.UI.Page
                 cmd.Parameters.AddWithValue("@Birthdate", txtBirthdate.Text);
                 cmd.Parameters.AddWithValue("@Gender", ddlGender.SelectedValue);
                 cmd.Parameters.AddWithValue("@DateModified", DateTime.Now);
-                cmd.Parameters.AddWithValue("@AccountNo", Session["accountno"].ToString());
+                cmd.Parameters.AddWithValue("@AccountNo", ltAccountNo.Text);
                 cmd.ExecuteNonQuery();
-                Helper.Log("Account", "Updated profile.");
+                Helper.Log("Account", "Updated faculty '" + ltAccountNo.Text + "'.");
                 Session["update"] = "yes";
-                Response.Redirect("~/Account/Profile");
+                Response.Redirect("~/Faculty");
             }
         }
     }
 
-    protected void btnChangePassword_Click(object sender, EventArgs e)
-    {
 
+    protected void btnArchive_Click(object sender, EventArgs e)
+    {
+        using (SqlConnection con = new SqlConnection(Helper.GetCon()))
+        {
+            con.Open();
+            string query = @"UPDATE Account SET Status=@Status,
+                DateModified=@DateModified
+                WHERE AccountNo=@AccountNo;
+                UPDATE Faculty SET Status=@Status,
+                DateModified=@DateModified
+                WHERE AccountNo=@AccountNo";
+            using (SqlCommand cmd = new SqlCommand(query, con))
+            {
+                cmd.Parameters.AddWithValue("@Status", "Archived");
+                cmd.Parameters.AddWithValue("@DateModified", DateTime.Now);
+                cmd.Parameters.AddWithValue("@AccountNo", ltAccountNo.Text);
+                cmd.ExecuteNonQuery();
+                Helper.Log("Delete", "Removed account '" + ltAccountNo.Text + "'.");
+                Session["update"] = "yes";
+                Response.Redirect("~/Faculty");
+            }
+        }
     }
 }

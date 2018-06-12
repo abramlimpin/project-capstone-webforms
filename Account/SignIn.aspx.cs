@@ -15,9 +15,21 @@ public partial class Account_SignIn : System.Web.UI.Page
             signout.Visible = true;
             Session.Remove("signout");
         }
+        else if (Session["signup"] != null)
+        {
+            signup.Visible = true;
+            Session.Remove("signup");
+        }
+        else if (Session["activate"] != null)
+        {
+            activate.Visible = true;
+            Session.Remove("activate");
+        }
         else
         {
             signout.Visible = false;
+            signup.Visible = false;
+            activate.Visible = false;
         }
     }
 

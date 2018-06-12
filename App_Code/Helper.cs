@@ -6,6 +6,7 @@ using System.Configuration;
 using System.Security.Cryptography;
 using System.Text;
 using System.Data.SqlClient;
+using System.Net.Mail;
 
 /// <summary>
 /// Summary description for Class1
@@ -36,10 +37,10 @@ public class Helper
         using (SqlConnection con = new SqlConnection(Helper.GetCon()))
         {
             con.Open();
-            string query = @"INSERT INTO Logs VALUES (@AccountID, @LogType, @Description, @LogDate)";
+            string query = @"INSERT INTO Logs VALUES (@AccountNo, @LogType, @Description, @LogDate)";
             using (SqlCommand cmd = new SqlCommand(query, con))
             {
-                cmd.Parameters.AddWithValue("@AccountID", Encrypt(HttpContext.Current.Session["accountno"] == null ? "0" :
+                cmd.Parameters.AddWithValue("@AccountNo", Encrypt(HttpContext.Current.Session["accountno"] == null ? "0" :
                     HttpContext.Current.Session["accountno"].ToString()));
                 cmd.Parameters.AddWithValue("@LogType", Encrypt(logType));
                 cmd.Parameters.AddWithValue("@Description", Encrypt(desc));
@@ -54,6 +55,49 @@ public class Helper
                 }
             }
         }
+    }
+
+    public static void Log(string accountNo, string logType, string desc)
+    {
+        using (SqlConnection con = new SqlConnection(Helper.GetCon()))
+        {
+            con.Open();
+            string query = @"INSERT INTO Logs VALUES (@AccountNo, @LogType, @Description, @LogDate)";
+            using (SqlCommand cmd = new SqlCommand(query, con))
+            {
+                cmd.Parameters.AddWithValue("@AccountNo", Encrypt(accountNo));
+                cmd.Parameters.AddWithValue("@LogType", Encrypt(logType));
+                cmd.Parameters.AddWithValue("@Description", Encrypt(desc));
+                cmd.Parameters.AddWithValue("@LogDate", DateTime.Now);
+                try
+                {
+                    cmd.ExecuteNonQuery();
+                }
+                catch
+                {
+
+                }
+            }
+        }
+    }
+
+    public static void SendEmail(string email, string subject, string message)
+    {
+        MailMessage emailMessage = new MailMessage();
+        emailMessage.From = new MailAddress("benildeproject.capstone@gmail.com", "no-reply");
+        emailMessage.To.Add(new MailAddress(email));
+        emailMessage.Subject = subject;
+        emailMessage.Body = message;
+        emailMessage.IsBodyHtml = true;
+        emailMessage.Priority = MailPriority.Normal;
+        SmtpClient MailClient = new SmtpClient("smtp.gmail.com", 587);
+        MailClient.EnableSsl = true;
+        MailClient.Credentials = new System.Net.NetworkCredential("benildeproject.capstone@gmail.com", "!thisisalongpassword1234567890");
+        try
+        {
+            MailClient.Send(emailMessage);
+        }
+        catch { }
     }
 
     public static string Hash(string keyword)

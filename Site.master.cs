@@ -14,6 +14,7 @@ public partial class Site : System.Web.UI.MasterPage
         {
             ToggleModules();
             ToggleMenu();
+            ToggleAdvising();
             GetUser();
             GetLogs();
         }
@@ -105,6 +106,10 @@ public partial class Site : System.Web.UI.MasterPage
         {
             if (Session["module"].ToString() == "Home")
                 menu_home.Attributes.Add("class", "active");
+            else if (Session["module"].ToString() == "Account")
+                menu_account.Attributes.Add("class", "active");
+            else if (Session["module"].ToString() == "Advising")
+                menu_advising.Attributes.Add("class", "active");
             else if (Session["module"].ToString() == "Users")
                 menu_users.Attributes.Add("class", "active");
             else if (Session["module"].ToString() == "Students")
@@ -121,6 +126,23 @@ public partial class Site : System.Web.UI.MasterPage
                 menu_admin.Attributes.Add("class", "active");
             else
                 menu_home.Attributes.Add("class", "active");
+        }
+    }
+
+    void ToggleAdvising()
+    {
+        using (SqlConnection con = new SqlConnection(Helper.GetCon()))
+        {
+            con.Open();
+            string query = @"SELECT RecordID FROM Faculty_Slots fs
+                INNER JOIN Faculty f ON fs.FacultyID = f.FacultyID
+                WHERE f.AccountNo=@AccountNo AND fs.Status=@Status";
+            using (SqlCommand cmd = new SqlCommand(query, con))
+            {
+                cmd.Parameters.AddWithValue("@AccountNo", Session["accountno"].ToString());
+                cmd.Parameters.AddWithValue("@Status", "Active");
+                menu_advising.Visible = cmd.ExecuteScalar() == null ? false : true;
+            }
         }
     }
 

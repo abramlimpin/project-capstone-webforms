@@ -46,6 +46,46 @@ public class DB
         }
     }
 
+    public static string CountRecords_Advisees()
+    {
+        using (SqlConnection con = new SqlConnection(Helper.GetCon()))
+        {
+            con.Open();
+            string query = @"SELECT COUNT(fa.AssignID) FROM Faculty_Assignments fa
+                INNER JOIN Faculty f ON fa.FacultyID = f.FacultyID
+                WHERE f.AccountNo=@AccountNo";
+            using (SqlCommand cmd = new SqlCommand(query, con))
+            {
+                cmd.Parameters.AddWithValue("@AccountNo", HttpContext.Current.Session["accountno"].ToString());
+                return ((int)cmd.ExecuteScalar()).ToString();
+            }
+        }
+    }
+
+    public static DataTable GetFaculty()
+    {
+        using (SqlConnection con = new SqlConnection(Helper.GetCon()))
+        {
+            con.Open();
+            string query = @"SELECT FacultyID, LastName + ', ' + FirstName AS Name 
+                FROM Faculty
+                WHERE Status=@Status
+                ORDER BY LastName";
+            using (SqlCommand cmd = new SqlCommand(query, con))
+            {
+                cmd.Parameters.AddWithValue("@Status", "Active");
+                using (SqlDataReader data = cmd.ExecuteReader())
+                {
+                    using (DataTable dt = new DataTable())
+                    {
+                        dt.Load(data);
+                        return dt;
+                    }
+                }
+            }
+        }
+    }
+
     public static DataTable GetTypes()
     {
         using (SqlConnection con = new SqlConnection(Helper.GetCon()))
@@ -92,6 +132,26 @@ public class DB
         {
             con.Open();
             string query = @"SELECT ProgramID, ProgramCode FROM Programs";
+            using (SqlCommand cmd = new SqlCommand(query, con))
+            {
+                using (SqlDataReader data = cmd.ExecuteReader())
+                {
+                    using (DataTable dt = new DataTable())
+                    {
+                        dt.Load(data);
+                        return dt;
+                    }
+                }
+            }
+        }
+    }
+
+    public static DataTable GetAffiliations()
+    {
+        using (SqlConnection con = new SqlConnection(Helper.GetCon()))
+        {
+            con.Open();
+            string query = @"SELECT AffID, Name FROM Affiliations";
             using (SqlCommand cmd = new SqlCommand(query, con))
             {
                 using (SqlDataReader data = cmd.ExecuteReader())

@@ -12,7 +12,18 @@ public partial class Students_Default : System.Web.UI.Page
     {
         Helper.ValidateUser();
         Session["module"] = "Students";
-        Session["title"] = "Students List";
+        Session["page"] = "Students List";
+
+        if (Session["update"] != null)
+        {
+            update.Visible = true;
+            Session.Remove("update");
+        }
+        else
+        {
+            update.Visible = false;
+        }
+
 
         if (!IsPostBack)
         {
@@ -38,6 +49,43 @@ public partial class Students_Default : System.Web.UI.Page
                 {
                     lvStudents.DataSource = data;
                     lvStudents.DataBind();
+                }
+            }
+        }
+    }
+
+    protected void lvStudents_ItemCommand(object sender, ListViewCommandEventArgs e)
+    {
+        if (e.CommandName == "activate")
+        {
+            Literal ltAccountNo = (Literal)e.Item.FindControl("ltAccountNo");
+            Literal ltEmail = (Literal)e.Item.FindControl("ltEmail");
+
+            using (SqlConnection con = new SqlConnection(Helper.GetCon()))
+            {
+                con.Open();
+                string query = @"UPDATE Account SET Status=@Status,
+                DateModified=@DateModified
+                WHERE AccountNo=@AccountNo;
+                UPDATE Students SET Status=@Status,
+                DateModified=@DateModified
+                WHERE AccountNo=@AccountNo";
+                using (SqlCommand cmd = new SqlCommand(query, con))
+                {
+                    cmd.Parameters.AddWithValue("@Status", "Active");
+                    cmd.Parameters.AddWithValue("@DateModified", DateTime.Now);
+                    cmd.Parameters.AddWithValue("@AccountNo", ltAccountNo.Text);
+                    cmd.ExecuteNonQuery();
+                    Helper.Log("Update", "Activated account '" + ltAccountNo.Text + "'.");
+                    Session["update"] = "yes";
+
+                    string URL = Helper.GetURL() + "Account/SignIn";
+                    string message = "Your account is now activated. You may now sign in.<br/><br/." +
+                        "Click the link below:<br/>" +
+                        "<a href='" + URL + "'>" + URL + "</a>";
+                    Helper.SendEmail(ltEmail.Text, "Account Activated", message);
+
+                    Response.Redirect("~/Students");
                 }
             }
         }

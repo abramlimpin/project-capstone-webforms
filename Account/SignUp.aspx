@@ -36,66 +36,70 @@
         <div class="card">
             <div class="body">
                 <form id="sign_up" runat="server">
+                    <asp:ScriptManager runat="server" />
                     <div class="msg">Register a new membership</div>
-                    <div id="error" runat="server" class="alert alert-danger" visible="false">
-                        Account Name already existing.
-                    </div>
-                    <div class="input-group">
-                        <span class="input-group-addon">
-                            <i class="material-icons">person</i>
-                        </span>
-                        <div class="form-line">
-                            <asp:TextBox ID="txtUsername" runat="server" CssClass="form-control" placeholder="InfoNet Account" required autofocus />
-                        </div>
-                    </div>
-                    <div class="input-group">
-                        <span class="input-group-addon">
-                            <i class="material-icons">person</i>
-                        </span>
-                        <div class="form-line">
-                            <asp:TextBox ID="txtFN" runat="server" CssClass="form-control" placeholder="First Name" required autofocus />
-                        </div>
-                    </div>
-                    <div class="input-group">
-                        <span class="input-group-addon">
-                            <i class="material-icons">person</i>
-                        </span>
-                        <div class="form-line">
-                            <asp:TextBox ID="txtLN" runat="server" CssClass="form-control" placeholder="Last Name" required autofocus />
-                        </div>
-                    </div>
-                    <div class="input-group">
-                        <span class="input-group-addon">
-                            <i class="material-icons">email</i>
-                        </span>
-                        <div class="form-line">
-                            <asp:TextBox ID="txtEmail" runat="server" CssClass="form-control" placeholder="Email Address" MaxLength="100" required />
-                        </div>
-                    </div>
-                    <div class="input-group">
-                        <span class="input-group-addon">
-                            <i class="material-icons">lock</i>
-                        </span>
-                        <div class="form-line">
-                            <asp:TextBox ID="txtPassword" runat="server" TextMode="Password" CssClass="form-control" placeholder="Password" required />
-                        </div>
-                    </div>
-                    <div class="input-group">
-                        <span class="input-group-addon">
-                            <i class="material-icons">lock</i>
-                        </span>
-                        <div class="form-line">
-                            <asp:TextBox ID="txtPassword_Confirm" runat="server" TextMode="Password" CssClass="form-control" placeholder="Confirm Password" required />
-                            <asp:CompareValidator ID="cv_Password" runat="server" SetFocusOnError="true" ControlToValidate="txtPassword_Confirm" ControlToCompare="txtPassword" />
-                        </div>
-                    </div>
-                    <div class="form-group">
-                        <input type="checkbox" name="terms" id="terms" class="filled-in chk-col-pink">
-                        <label for="terms">I read and agree to the <a href="javascript:void(0);">terms of usage</a>.</label>
-                    </div>
-
+                    <asp:UpdatePanel ID="upSignUp" runat="server">
+                        <ContentTemplate>
+                            <div id="error" runat="server" class="alert alert-danger" visible="false">
+                                Account Name already existing.
+                            </div>
+                            <div class="input-group">
+                                <span class="input-group-addon">
+                                    <i class="material-icons">person</i>
+                                </span>
+                                <div class="form-line">
+                                    <asp:TextBox ID="txtUsername" runat="server" CssClass="form-control" placeholder="InfoNet Account" required autofocus />
+                                </div>
+                            </div>
+                            <div class="input-group">
+                                <span class="input-group-addon">
+                                    <i class="material-icons">person</i>
+                                </span>
+                                <div class="form-line">
+                                    <asp:TextBox ID="txtFN" runat="server" CssClass="form-control" placeholder="First Name" required />
+                                </div>
+                            </div>
+                            <div class="input-group">
+                                <span class="input-group-addon">
+                                    <i class="material-icons">person</i>
+                                </span>
+                                <div class="form-line">
+                                    <asp:TextBox ID="txtLN" runat="server" CssClass="form-control" placeholder="Last Name" required />
+                                </div>
+                            </div>
+                            <div class="input-group">
+                                <span class="input-group-addon">
+                                    <i class="material-icons">email</i>
+                                </span>
+                                <div class="form-line">
+                                    <asp:TextBox ID="txtEmail" runat="server" CssClass="form-control" placeholder="Email Address" pattern="^[A-Za-z0-9._%+-]+@benilde.edu.ph$" MaxLength="100" required />
+                                </div>
+                            </div>
+                            <div class="input-group">
+                                <span class="input-group-addon">
+                                    <i class="material-icons">lock</i>
+                                </span>
+                                <div class="form-line">
+                                    <asp:TextBox ID="txtPassword" runat="server" TextMode="Password" CssClass="form-control" placeholder="Password" required />
+                                </div>
+                            </div>
+                            <div class="input-group">
+                                <span class="input-group-addon">
+                                    <i class="material-icons">lock</i>
+                                </span>
+                                <div class="form-line">
+                                    <asp:TextBox ID="txtPassword_Confirm" runat="server" TextMode="Password" CssClass="form-control" placeholder="Confirm Password" required />
+                                    <asp:CompareValidator ID="cv_Password" runat="server" SetFocusOnError="true" ControlToValidate="txtPassword_Confirm" ControlToCompare="txtPassword" />
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <input type="checkbox" name="terms" id="terms" class="filled-in chk-col-pink">
+                                <label for="terms">I read and agree to the <a href="javascript:void(0);">terms of usage</a>.</label>
+                            </div>
+                        </ContentTemplate>
+                    </asp:UpdatePanel>
                     <asp:Button ID="btnSignUp" runat="server" CssClass="btn btn-block bg-pink waves-effect"
-                                Text="Sign Up" OnClick="btnSignUp_Click" />
+                        Text="Sign Up" OnClick="btnSignUp_Click" />
 
                     <div class="m-t-25 m-b--5 align-center">
                         <a href="SignIn">Already have a membership?</a>

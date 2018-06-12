@@ -66,7 +66,7 @@
                         <div class="form-group">
                             <asp:Button ID="btnUpdate" runat="server" CssClass="btn btn-lg btn-success waves-effect" Text="Update" OnClick="btnUpdate_Click" />
                             <a runat="server" href="~/Users" class="btn btn-lg btn-default waves-effect">Back to List</a>
-                            <asp:Button ID="btnReset" runat="server" CssClass="btn btn-lg btn-danger waves-effect pull-right" Text="Reset Password" OnClientClick='return confirm("Reset password?")' />
+                            <asp:Button ID="btnArchive" runat="server" CssClass="btn btn-lg btn-danger waves-effect pull-right" Text="Archive" OnClientClick='return confirm("Archive record?")' OnClick="btnArchive_Click" />
                         </div>
                     </form>
                 </div>

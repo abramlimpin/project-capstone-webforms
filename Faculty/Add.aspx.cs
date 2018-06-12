@@ -1,33 +1,24 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Data.SqlClient;
+using System.IO;
 using System.Linq;
 using System.Web;
 using System.Web.UI;
 using System.Web.UI.WebControls;
 
-public partial class Users_Add : System.Web.UI.Page
+public partial class Faculty_Add : System.Web.UI.Page
 {
     protected void Page_Load(object sender, EventArgs e)
     {
         Helper.ValidateUser();
-        Session["module"] = "Users";
-        Session["page"] = "Add a User";
+        Session["module"] = "Faculty";
+        Session["page"] = "Add a Faculty";
 
         if (!IsPostBack)
         {
-            GetAccountTypes();
             GetPrograms();
         }
-    }
-
-    void GetAccountTypes()
-    {
-        ddlTypes.DataSource = DB.GetTypes();
-        ddlTypes.DataTextField = "UserType";
-        ddlTypes.DataValueField = "TypeID";
-        ddlTypes.DataBind();
-        ddlTypes.Items.Insert(0, new ListItem("Select account type...", ""));
     }
 
     void GetPrograms()
@@ -58,7 +49,7 @@ public partial class Users_Add : System.Web.UI.Page
                 using (SqlCommand cmd = new SqlCommand(query, con))
                 {
                     cmd.Parameters.AddWithValue("@AccountNo", txtUsername.Text.ToLower());
-                    cmd.Parameters.AddWithValue("@TypeID", ddlTypes.SelectedValue);
+                    cmd.Parameters.AddWithValue("@TypeID", 3);
                     cmd.Parameters.AddWithValue("@RoleID", DBNull.Value);
                     cmd.Parameters.AddWithValue("@Code", code);
                     cmd.Parameters.AddWithValue("@Email", txtEmail.Text);
@@ -70,63 +61,47 @@ public partial class Users_Add : System.Web.UI.Page
                     cmd.ExecuteNonQuery();
                 }
 
-                string query2 = "";
-                if (ddlTypes.SelectedIndex == 1) // Administrator
-                {
-                    query2 = @"INSERT INTO Personnel 
-                        (Code, AccountNo, FirstName, LastName, Gender,
-                        DateAdded, Status)
-                        VALUES
-                        (@Code, @AccountNo, @FirstName, @LastName, @Gender,
-                        @DateAdded, @Status)";
-                }
-                else if (ddlTypes.SelectedIndex == 2 ||
-                    ddlTypes.SelectedIndex == 3) // Personnel & Faculty
-                {
-                    query2 = @"INSERT INTO Faculty
-                        Code, AccountNo, ProgramID, FirstName, LastName,
-                        Gender, DateAdded, Status)
-                        VALUES
-                        (@Code, @AccountNo, @ProgramID, @FirstName, @LastName, @Gender,
-                        @DateAdded, @Status)";
-                }
-                else
-                {
-                    query2 = @"INSERT INTO Students 
-                        Code, AccountNo, ProgramID, FirstName, LastName,
-                        Gender, DateAdded, Status)
-                        VALUES 
-                        (@Code, @AccountNo, @ProgramID, @FirstName, @LastName, @Gender, 
-                        @DateAdded, @Status)";
-                }
+                string query2 = @"INSERT INTO Faculty VALUES
+                    (@Code, @AccountNo, @ProgramID, @FirstName, @MiddleName, 
+                    @LastName, @Nickname, @Image, @Birthdate, @Gender,
+                    @DateAdded, @DateModified, @Status)";
+            
                 using (SqlCommand cmd = new SqlCommand(query2, con))
                 {
                     cmd.Parameters.AddWithValue("@Code", Guid.NewGuid());
                     cmd.Parameters.AddWithValue("@AccountNo", txtUsername.Text);
                     cmd.Parameters.AddWithValue("@ProgramID", ddlPrograms.SelectedValue);
                     cmd.Parameters.AddWithValue("@FirstName", txtFN.Text);
+                    cmd.Parameters.AddWithValue("@MiddleName", txtMN.Text);
                     cmd.Parameters.AddWithValue("@LastName", txtLN.Text);
+                    cmd.Parameters.AddWithValue("@Nickname", txtNickname.Text);
+                    if (fuImage.HasFile)
+                    {
+                        string ext = Path.GetExtension(fuImage.FileName);
+
+                        cmd.Parameters.AddWithValue("@Image", txtUsername.Text + "-" + "image" + ext);
+                        fuImage.SaveAs(Server.MapPath("~/images/users/" + txtUsername.Text + "-" + "image" + ext));
+                    }
+                    else
+                    {
+                        cmd.Parameters.AddWithValue("@Image", DBNull.Value);
+                    }
+                    DateTime birthDate = DateTime.Now;
+                    bool validBirthDate = DateTime.TryParse(txtBirthdate.Text, out birthDate);
+                    if (validBirthDate)
+                        cmd.Parameters.AddWithValue("@Birthdate", birthDate);
+                    else
+                        cmd.Parameters.AddWithValue("@Birthdate", DBNull.Value);
                     cmd.Parameters.AddWithValue("@Gender", ddlGender.SelectedValue);
                     cmd.Parameters.AddWithValue("@DateAdded", DateTime.Now);
+                    cmd.Parameters.AddWithValue("@DateModified", DBNull.Value);
                     cmd.Parameters.AddWithValue("@Status", "Active");
                     cmd.ExecuteNonQuery();
                     Helper.Log("Add", "Added account '" + txtUsername.Text + "'.");
                     Session["add"] = "yes";
-                    Response.Redirect("~/Users");
+                    Response.Redirect("~/Faculty");
                 }
             }
         }
-    }
-
-    protected void ddlTypes_SelectedIndexChanged(object sender, EventArgs e)
-    {
-        if (ddlTypes.SelectedIndex == 2 ||
-            ddlTypes.SelectedIndex == 3 ||
-            ddlTypes.SelectedIndex == 4)
-        {
-            program.Visible = true;
-        }
-        else
-            program.Visible = false;
     }
 }

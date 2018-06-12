@@ -50,6 +50,12 @@
             <div class="body">
                 <form id="sign_in" runat="server">
                     <div class="msg">Sign in to start your session</div>
+                    <div id="activate" runat="server" class="alert alert-info" visible="false">
+                        Your account is currently processed. Please check your email when to sign in.
+                    </div>
+                    <div id="signup" runat="server" class="alert alert-info" visible="false">
+                        Please check your email to activate your account.
+                    </div>
                     <div id="error" runat="server" class="alert alert-danger" visible="false">
                         Invalid credentials.
                     </div>

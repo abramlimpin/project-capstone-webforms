@@ -1,7 +1,6 @@
-﻿<%@ Page Title="" Language="C#" MasterPageFile="~/Site.master" AutoEventWireup="true" CodeFile="Profile.aspx.cs" Inherits="Account_Profile" %>
+﻿<%@ Page Title="" Language="C#" MasterPageFile="~/Site.master" AutoEventWireup="true" CodeFile="Details.aspx.cs" Inherits="Faculty_Details" %>
 
 <asp:Content ID="Content1" ContentPlaceHolderID="title" runat="Server">
-    My Profile
 </asp:Content>
 <asp:Content ID="Content2" ContentPlaceHolderID="content" runat="Server">
     <div class="row clearfix">
@@ -101,6 +100,8 @@
                         </div>
                         <div class="form-group">
                             <asp:Button ID="btnUpdate" runat="server" CssClass="btn btn-lg btn-success waves-effect" Text="Update" OnClick="btnUpdate_Click" />
+                            <a runat="server" href="~/Faculty" class="btn btn-lg btn-default waves-effect">Back to List</a>
+                            <asp:Button ID="btnArchive" runat="server" CssClass="btn btn-lg btn-danger waves-effect pull-right" Text="Archive" OnClientClick='return confirm("Archive record?")' OnClick="btnArchive_Click" />
                         </div>
                     </div>
                 </div>
@@ -108,27 +109,7 @@
             <div class="col-lg-6">
                 <div class="card">
                     <div class="body">
-                        <h2 class="card-inside-title">Account Information</h2>
-
-                        <div id="account" runat="server" class="alert alert-success" visible="false">
-                            Profile updated.
-                        </div>
-
-                        <div class="form-group form-float">
-                            <div class="form-line">
-                                <asp:TextBox ID="txtPassword_Old" runat="server" type="password" MaxLength="30" CssClass="form-control" />
-                                <label class="form-label">Old Password</label>
-                            </div>
-                        </div>
-                        <div class="form-group form-float">
-                            <div class="form-line">
-                                <asp:TextBox ID="txtPassword_New" runat="server" type="password" MaxLength="30" CssClass="form-control" />
-                                <label class="form-label">New Password</label>
-                            </div>
-                        </div>
-                        <div class="form-group">
-                            <asp:Button ID="btnChangePassword" runat="server" CssClass="btn btn-lg btn-success waves-effect" Text="Change Password" OnClick="btnChangePassword_Click" />
-                        </div>
+                        <h2 class="card-inside-title">Load Assignment</h2>
                     </div>
                 </div>
             </div>

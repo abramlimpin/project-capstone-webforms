@@ -23,34 +23,34 @@ public partial class Account_SignUp : System.Web.UI.Page
         {
             error.Visible = false;
             Guid code = Guid.NewGuid();
-            int accountID = 0;
             using (SqlConnection con = new SqlConnection(Helper.GetCon()))
             {
                 con.Open();
-                string query = @"INSERT INTO Account VALUES (@AccountID,
-                @Code, @Password, @DateAdded, @DateActivated,
-                @DateModified, @Status);
-                SELECT TOP 1 AccountID FROM Account
-                ORDER BY AccountID DESC;";
+                string query = @"INSERT INTO Account VALUES (@AccountNo,
+                    @TypeID, @RoleID, @Code, @Email, @Password, @DateAdded, @DateActivated,
+                    @DateModified, @Status);";
                 using (SqlCommand cmd = new SqlCommand(query, con))
                 {
-                    cmd.Parameters.AddWithValue("@AccountID", txtUsername.Text);
+                    cmd.Parameters.AddWithValue("@AccountNo", txtUsername.Text.ToLower());
+                    cmd.Parameters.AddWithValue("@TypeID", 4);
+                    cmd.Parameters.AddWithValue("@RoleID", DBNull.Value);
                     cmd.Parameters.AddWithValue("@Code", code);
-                    cmd.Parameters.AddWithValue("@Password", Helper.Hash(txtPassword.Text));
+                    cmd.Parameters.AddWithValue("@Email", txtEmail.Text);
+                    cmd.Parameters.AddWithValue("@Password", Helper.Hash("temppassword"));
                     cmd.Parameters.AddWithValue("@DateAdded", DateTime.Now);
-                    cmd.Parameters.AddWithValue("@DateActivated", DBNull.Value);
+                    cmd.Parameters.AddWithValue("@DateActivated", DateTime.Now);
                     cmd.Parameters.AddWithValue("@DateModified", DBNull.Value);
-                    cmd.Parameters.AddWithValue("@Status", "Pending");
-                    accountID = (int)cmd.ExecuteScalar();
+                    cmd.Parameters.AddWithValue("@Status", "For Confirmation");
+                    cmd.ExecuteNonQuery();
                 }
 
                 string query2 = @"INSERT INTO Students VALUES (@Code, @AccountNo, @CourseID,
-                @FirstName, @MiddleName, @LastName, @Nickname, @Image, @Birthdate,
-                @Gender, @DateAdded, @DateModified, @Status)";
+                    @FirstName, @MiddleName, @LastName, @Nickname, @Image, @Birthdate,
+                    @Gender, @DateAdded, @DateModified, @Status)";
                 using (SqlCommand cmd = new SqlCommand(query2, con))
                 {
                     cmd.Parameters.AddWithValue("@Code", Guid.NewGuid());
-                    cmd.Parameters.AddWithValue("@AccountNo", accountID);
+                    cmd.Parameters.AddWithValue("@AccountNo", txtUsername.Text);
                     cmd.Parameters.AddWithValue("@CourseID", DBNull.Value);
                     cmd.Parameters.AddWithValue("@FirstName", txtFN.Text);
                     cmd.Parameters.AddWithValue("@MiddleName", DBNull.Value);
@@ -61,11 +61,18 @@ public partial class Account_SignUp : System.Web.UI.Page
                     cmd.Parameters.AddWithValue("@Gender", DBNull.Value);
                     cmd.Parameters.AddWithValue("@DateAdded", DateTime.Now);
                     cmd.Parameters.AddWithValue("@DateModified", DBNull.Value);
-                    cmd.Parameters.AddWithValue("@Status", "Pending");
+                    cmd.Parameters.AddWithValue("@Status", "For Confirmation");
                     cmd.ExecuteNonQuery();
-                    Helper.Log("Account", "Student #" + accountID.ToString() + " signed up.");
+                    Helper.Log("Account", "Student '" + txtUsername.Text + "' signed up.");
+
+                    string URL = Helper.GetURL() + "Account/Activate?code=" + code;
+                    string message = "Welcome, " + txtFN.Text + " " + txtLN.Text + "!<br/><br/>" +
+                        "You have a created an account. Please click the link below to confirm: <br/>" +
+                        "<a href='" + URL + "'>" + URL + "</a><br/><br/>" +
+                        "Thank you.";
+                    Helper.SendEmail(txtEmail.Text, "Account Confirmation", message);
                     Session["signup"] = "yes";
-                    Response.Redirect("SignIn.aspx");
+                    Response.Redirect("SignIn");
                 }
             }
         }

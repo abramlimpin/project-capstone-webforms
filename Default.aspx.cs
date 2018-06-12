@@ -14,17 +14,37 @@ public partial class _Default : System.Web.UI.Page
         Session["module"] = "Home";
         Session["page"] = "Dashboard";
 
-        ltCount_Users.Text = DB.CountRecords("Account");
-        count_users.Attributes.Add("data-to", ltCount_Users.Text);
+        if (Session["typeid"].ToString() == "1" ||
+            Session["typeid"].ToString() == "2")
+        {
+            stat_admin.Visible = true;
+            stat_faculty.Visible = false;
 
-        ltCount_Students.Text = DB.CountRecords("Students");
-        count_students.Attributes.Add("data-to", ltCount_Students.Text);
+            ltCount_Users.Text = DB.CountRecords("Account");
+            count_users.Attributes.Add("data-to", ltCount_Users.Text);
 
-        ltCount_Faculty.Text = DB.CountRecords("Faculty");
-        count_faculty.Attributes.Add("data-to", ltCount_Faculty.Text);
+            ltCount_Students.Text = DB.CountRecords("Students");
+            count_students.Attributes.Add("data-to", ltCount_Students.Text);
 
-        ltCount_Enlist.Text = DB.CountRecords("Enlistment");
-        count_enlist.Attributes.Add("data-to", ltCount_Enlist.Text);
+            ltCount_Faculty.Text = DB.CountRecords("Faculty");
+            count_faculty.Attributes.Add("data-to", ltCount_Faculty.Text);
+
+            ltCount_Enlist.Text = DB.CountRecords("Enlistment");
+            count_enlist.Attributes.Add("data-to", ltCount_Enlist.Text);
+        }
+        else if (Session["typeid"].ToString() == "3")
+        {
+            stat_admin.Visible = false;
+            stat_faculty.Visible = true;
+
+            ltCount_Advisees.Text = DB.CountRecords_Advisees();
+            count_students.Attributes.Add("data-to", ltCount_Advisees.Text);
+        }
+        else
+        {
+            stat_admin.Visible = false;
+            stat_faculty.Visible = false;
+        }
 
         if (!IsPostBack)
         {

@@ -113,4 +113,28 @@ public partial class Users_Details : System.Web.UI.Page
             }
         }
     }
+
+    protected void btnArchive_Click(object sender, EventArgs e)
+    {
+        using (SqlConnection con = new SqlConnection(Helper.GetCon()))
+        {
+            con.Open();
+            string query = @"UPDATE Account SET Status=@Status,
+                DateModified=@DateModified
+                WHERE AccountNo=@AccountNo;
+                UPDATE Personnel SET Status=@Status,
+                DateModified=@DateModified
+                WHERE AccountNo=@AccountNo";
+            using (SqlCommand cmd = new SqlCommand(query, con))
+            {
+                cmd.Parameters.AddWithValue("@Status", "Archived");
+                cmd.Parameters.AddWithValue("@DateModified", DateTime.Now);
+                cmd.Parameters.AddWithValue("@AccountNo", ltAccountNo.Text);
+                cmd.ExecuteNonQuery();
+                Helper.Log("Delete", "Removed account '" + ltAccountNo.Text + "'.");
+                Session["update"] = "yes";
+                Response.Redirect("~/Users");
+            }
+        }
+    }
 }
