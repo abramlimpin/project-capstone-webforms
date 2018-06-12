@@ -86,8 +86,8 @@
                         <div class="header">
                             <h2><%# Eval("Title") %>
                                 <small>
-                                    <span class="pull-left">Date Posted: <%# Eval("DateAdded", "{0: MM/dd/yyyy hh:mm tt}") %></span>
-                                    <span class="pull-right">Last Modified: <%# Eval("DateModified", "{0: MM/dd/yyyy hh:mm tt}") %>
+                                    <span class="pull-left">Date Posted: <%# Eval("DateAdded", "{0: MM/dd/yyyy}") %></span>
+                                    <span class="pull-right">Last Modified: <%# Eval("DateModified", "{0: MM/dd/yyyy}") %>
                                 </small>
                             </h2>
                         </div>

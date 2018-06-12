@@ -16,7 +16,7 @@
                                 <asp:Literal ID="ltEmail" runat="server" /></h5>
                             <h5>Studio:
                                 <asp:Literal ID="ltStudio" runat="server" /></h5>
-                            <blockquote class="m-b-25">
+                            <blockquote class="m-b-15">
                                 <p>
                                     <asp:Literal ID="ltManifesto" runat="server" />
                                 </p>
@@ -80,6 +80,12 @@
                                 <p>
                                     <asp:Literal ID="ltAgenda" runat="server" />
                                 </p>
+                                <asp:Panel ID="pnlOthers" runat="server" Visible="false">
+                                    <h2 class="card-inside-title">Other Statement</h2>
+                                <p>
+                                    <asp:Literal ID="ltOthers" runat="server" />
+                                </p>
+                                </asp:Panel>
                             </div>
                             <div role="tabpanel" class="tab-pane fade" id="works">
                             </div>
@@ -90,6 +96,11 @@
             <div class="col-lg-3">
                 <div class="card">
                     <div class="body">
+                        
+                                <h2 class="card-inside-title">Availability</h2>
+                                <p>
+                                    <asp:Literal ID="ltAvailability" runat="server" />
+                                </p>
                         <asp:LinkButton ID="btnSelect" runat="server" CssClass="btn btn-lg btn-success btn-block waves-effect">
                             <i class="material-icons">add_to_photos</i><span>CHOOSE AS ADVISER</span>
                         </asp:LinkButton>

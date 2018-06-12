@@ -20,9 +20,15 @@ public partial class Account_Profile : System.Web.UI.Page
             update.Visible = true;
             Session.Remove("update");
         }
+        else if (Session["account"] != null)
+        {
+            account.Visible = true;
+            Session.Remove("account");
+        }
         else
         {
             update.Visible = false;
+            account.Visible = false;
         }
         if (!IsPostBack)
         {
@@ -99,6 +105,14 @@ public partial class Account_Profile : System.Web.UI.Page
                     Birthdate=@Birthdate, Gender=@Gender, DateModified=@DateModified
                     WHERE AccountNo=@AccountNo";
             }
+            else if (Session["typeid"].ToString() == "2" ||
+                Session["typeid"].ToString() == "3")
+            {
+                query = @"UPDATE Faculty SET Image=@Image, MiddleName=@MiddleName,
+                    Nickname=@Nickname,
+                    Birthdate=@Birthdate, Gender=@Gender, DateModified=@DateModified
+                    WHERE AccountNo=@AccountNo";
+            }
             using (SqlCommand cmd = new SqlCommand(query, con))
             {
                 if (fuImage.HasFile)
@@ -127,8 +141,52 @@ public partial class Account_Profile : System.Web.UI.Page
         }
     }
 
+    bool IsValid(string password)
+    {
+        using (SqlConnection con = new SqlConnection(Helper.GetCon()))
+        {
+            con.Open();
+            string query = @"SELECT AccountNo FROM Account
+                WHERE AccountNo=@AccountNo AND Password=@Password";
+            using (SqlCommand cmd = new SqlCommand(query, con))
+            {
+                cmd.Parameters.AddWithValue("@AccountNo", Session["accountno"].ToString());
+                cmd.Parameters.AddWithValue("@Password", Helper.Hash(password));
+                return cmd.ExecuteScalar() == null ? false : true;
+            }
+        }
+    }
+
     protected void btnChangePassword_Click(object sender, EventArgs e)
     {
+        if (txtPassword_Old.Text != "" && txtPassword_New.Text != "")
+        {
+            if (IsValid(txtPassword_Old.Text))
+            {
+                password.Visible = false;
+                using (SqlConnection con = new SqlConnection(Helper.GetCon()))
+                {
+                    con.Open();
+                    string query = @"UPDATE Account SET Password=@Password,
+                        DateModified=@DateModified
+                        WHERE AccountNo=@AccountNo";
+                    using (SqlCommand cmd = new SqlCommand(query, con))
+                    {
+                        cmd.Parameters.AddWithValue("@Password", Helper.Hash(txtPassword_New.Text));
+                        cmd.Parameters.AddWithValue("@DateModified", DateTime.Now);
+                        cmd.Parameters.AddWithValue("@AccountNo", Session["accountno"].ToString());
+                        cmd.ExecuteNonQuery();
 
+                        Helper.Log("Account", "Changed password.");
+                        Session["account"] = "yes";
+                        Response.Redirect("~/Account/Profile");
+                    }
+                }
+            }
+            else
+            {
+                password.Visible = true;
+            }
+        }
     }
 }

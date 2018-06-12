@@ -61,7 +61,8 @@ public partial class Account_Advising : System.Web.UI.Page
             con.Open();
             string query = @"SELECT f.FirstName + ' ' + f.LastName AS Name,
                 f.FacultyID, fa.StudioName, fa.Teaching, fa.Research,
-                fa.Statement, fa.Resume, fa.Agenda, fa.Manifesto
+                fa.Statement, fa.Resume, fa.Agenda, fa.Manifesto,
+                fa.Availability, fa.Others
                 FROM Faculty f
                 LEFT JOIN Faculty_Advising fa ON fa.FacultyID = f.FacultyID
                 WHERE f.AccountNo=@AccountNo";
@@ -83,6 +84,8 @@ public partial class Account_Advising : System.Web.UI.Page
                         txtResume.Text = data["Resume"].ToString();
                         txtAgenda.Text = data["Agenda"].ToString();
                         txtManifesto.Text = data["Manifesto"].ToString();
+                        txtAvailablity.Text = data["Availability"].ToString();
+                        txtOthers.Text = data["Others"].ToString();
                     }
 
                     GetAffiliations_Faculty();
@@ -170,6 +173,7 @@ public partial class Account_Advising : System.Web.UI.Page
                 query = @"UPDATE Faculty_Advising SET StudioName=@StudioName,
                     Teaching=@Teaching, Research=@Research, Statement=@Statement,
                     Resume=@Resume, Agenda=@Agenda, Manifesto=@Manifesto,
+                    Availability=@Availability, Other=@Others,
                     DateModified=@DateModified
                     WHERE FacultyID=@FacultyID";
             }
@@ -177,7 +181,8 @@ public partial class Account_Advising : System.Web.UI.Page
             {
                 query = @"INSERT INTO Faculty_Advising VALUES 
                     (@FacultyID, @StudioName, @Teaching, @Research, @Statement,
-                    @Resume, @Agenda, @Manifesto, @DateAdded, @DateModified)";
+                    @Resume, @Agenda, @Manifesto, @Availability, @Others, 
+                    @DateAdded, @DateModified)";
             }
             using (SqlCommand cmd = new SqlCommand(query, con))
             {
@@ -189,6 +194,8 @@ public partial class Account_Advising : System.Web.UI.Page
                 cmd.Parameters.AddWithValue("@Resume", txtResume.Text);
                 cmd.Parameters.AddWithValue("@Agenda", txtAgenda.Text);
                 cmd.Parameters.AddWithValue("@Manifesto", txtManifesto.Text);
+                cmd.Parameters.AddWithValue("@Availability", txtAvailablity.Text);
+                cmd.Parameters.AddWithValue("@Others", txtOthers.Text);
                 cmd.Parameters.AddWithValue("@DateAdded", DateTime.Now);
                 if (accountExisting)
                     cmd.Parameters.AddWithValue("@DateModified", DateTime.Now);

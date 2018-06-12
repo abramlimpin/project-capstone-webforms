@@ -106,6 +106,26 @@ public class DB
         }
     }
 
+    public static DataTable GetSchools()
+    {
+        using (SqlConnection con = new SqlConnection(Helper.GetCon()))
+        {
+            con.Open();
+            string query = @"SELECT SchoolID, Name FROM Schools";
+            using (SqlCommand cmd = new SqlCommand(query, con))
+            {
+                using (SqlDataReader data = cmd.ExecuteReader())
+                {
+                    using (DataTable dt = new DataTable())
+                    {
+                        dt.Load(data);
+                        return dt;
+                    }
+                }
+            }
+        }
+    }
+
     public static DataTable GetRoles()
     {
         using (SqlConnection con = new SqlConnection(Helper.GetCon()))

@@ -31,10 +31,11 @@ public partial class adviser : System.Web.UI.Page
         {
             con.Open();
             string query = @"SELECT f.FacultyID, f.Image, 
-                f.FirstName + ' ' + f.LastName AS Name,
+                f.FirstName + ' ""' + f.Nickname + '"" ' + f.LastName AS Name,
                 a.Email, 
                 fa.StudioName, fa.Teaching, fa.Research,
-                fa.Statement, fa.Resume, fa.Agenda, fa.Manifesto
+                fa.Statement, fa.Resume, fa.Agenda, fa.Manifesto,
+                fa.Availability, fa.Others
                 FROM Faculty f 
                 INNER JOIN Account a ON f.AccountNo = a.AccountNo
                 INNER JOIN Faculty_Advising fa ON f.FacultyID = fa.FacultyID
@@ -63,6 +64,11 @@ public partial class adviser : System.Web.UI.Page
 
                             ltResume.Text = data["Resume"].ToString();
                             ltAgenda.Text = data["Agenda"].ToString();
+                            ltOthers.Text = data["Others"].ToString();
+
+                            pnlOthers.Visible = ltOthers.Text == "" ? false : true;
+
+                            ltAvailability.Text = data["Availability"].ToString();
                         }
                     }
                     else

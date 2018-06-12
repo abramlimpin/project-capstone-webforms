@@ -109,11 +109,12 @@
                 <div class="card">
                     <div class="body">
                         <h2 class="card-inside-title">Account Information</h2>
-
-                        <div id="account" runat="server" class="alert alert-success" visible="false">
-                            Profile updated.
+                        <div id="password" runat="server" class="alert alert-danger" visible="false">
+                            Incorrect old password.
                         </div>
-
+                        <div id="account" runat="server" class="alert alert-success" visible="false">
+                            Password changed.
+                        </div>
                         <div class="form-group form-float">
                             <div class="form-line">
                                 <asp:TextBox ID="txtPassword_Old" runat="server" type="password" MaxLength="30" CssClass="form-control" />

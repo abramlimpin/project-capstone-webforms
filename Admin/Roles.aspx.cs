@@ -237,7 +237,7 @@ public partial class Admin_Roles : System.Web.UI.Page
         {
             con.Open();
             string query = @"UPDATE Roles SET Name=@Name, Description=@Description,
-                Status=@Status, DateModified=@LastModified
+                Status=@Status, DateModified=@DateModified
                 WHERE RoleID=@RoleID";
             using (SqlCommand cmd = new SqlCommand(query, con))
             {

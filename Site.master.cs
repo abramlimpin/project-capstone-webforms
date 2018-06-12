@@ -35,19 +35,28 @@ public partial class Site : System.Web.UI.MasterPage
                     FROM Personnel p
                     INNER JOIN Account a ON p.AccountNo = a.AccountNo
                     WHERE a.AccountNo = @AccountNo";
-                    using (SqlCommand cmd = new SqlCommand(query, con))
+                }
+                else if (Session["typeid"].ToString() == "2" ||
+                    Session["typeid"].ToString() == "3")
+                {
+                    query = @"SELECT f.FirstName + ' ' + f.LastName AS Name, a.Email,
+                    f.Image
+                    FROM Faculty f
+                    INNER JOIN Account a ON f.AccountNo = a.AccountNo
+                    WHERE a.AccountNo = @AccountNo";
+                }
+                using (SqlCommand cmd = new SqlCommand(query, con))
+                {
+                    cmd.Parameters.AddWithValue("@AccountNo", Session["accountno"].ToString());
+                    using (SqlDataReader data = cmd.ExecuteReader())
                     {
-                        cmd.Parameters.AddWithValue("@AccountNo", Session["accountno"].ToString());
-                        using (SqlDataReader data = cmd.ExecuteReader())
+                        while (data.Read())
                         {
-                            while (data.Read())
-                            {
-                                string imageURL = data["Image"].ToString() == "" ? "images/user-placeholder.jpg" :
-                                    "images/users/" + data["Image"].ToString();
-                                avatar.Attributes.Add("style", "background-image: url('" + Helper.GetURL() + imageURL + "')");
-                                ltUser.Text = data["Name"].ToString();
-                                ltEmail.Text = data["Email"].ToString();
-                            }
+                            string imageURL = data["Image"].ToString() == "" ? "images/user-placeholder.jpg" :
+                                "images/users/" + data["Image"].ToString();
+                            avatar.Attributes.Add("style", "background-image: url('" + Helper.GetURL() + imageURL + "')");
+                            ltUser.Text = data["Name"].ToString();
+                            ltEmail.Text = data["Email"].ToString();
                         }
                     }
                 }
