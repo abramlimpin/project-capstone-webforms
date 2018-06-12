@@ -48,7 +48,7 @@
                                     <i class="material-icons">person</i>
                                 </span>
                                 <div class="form-line">
-                                    <asp:TextBox ID="txtUsername" runat="server" CssClass="form-control" placeholder="InfoNet Account" required autofocus />
+                                    <asp:TextBox ID="txtUsername" runat="server" type="number" MaxLength="8" CssClass="form-control" placeholder="InfoNet Account" required autofocus />
                                 </div>
                             </div>
                             <div class="input-group">

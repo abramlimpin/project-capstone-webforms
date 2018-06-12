@@ -44,6 +44,15 @@
     <!-- Jquery Core Js -->
     <script src='<%= Page.ResolveUrl("~/plugins/jquery/jquery.min.js") %>'></script>
 
+    <!-- Global site tag (gtag.js) - Google Analytics -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=UA-63623673-3"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag() { dataLayer.push(arguments); }
+        gtag('js', new Date());
+
+        gtag('config', 'UA-63623673-3');
+    </script>
 
 </head>
 
@@ -112,7 +121,8 @@
                                                     </div>
                                                     <div class="menu-info">
                                                         <h4><%# Helper.Decrypt(Eval("Description").ToString()) %></h4>
-                                                        <p><i class="material-icons">access_time</i>
+                                                        <p>
+                                                            <i class="material-icons">access_time</i>
                                                             <asp:Label ID="ltRelative" runat="server" ToolTip='<%# Eval("LogDate") %>' />
                                                             <asp:Literal ID="ltTimestamp" runat="server" Text='<%# Eval("LogDate") %>' Visible="false" />
                                                         </p>
@@ -224,9 +234,11 @@
                 </div>
                 <div class="info-container">
                     <div class="name" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                        <asp:Literal ID="ltUser" runat="server" Text="John Doe" /></div>
+                        <asp:Literal ID="ltUser" runat="server" Text="John Doe" />
+                    </div>
                     <div class="email">
-                        <asp:Literal ID="ltEmail" runat="server" Text="john.doe@example.com" /></div>
+                        <asp:Literal ID="ltEmail" runat="server" Text="john.doe@example.com" />
+                    </div>
                     <div class="btn-group user-helper-dropdown">
                         <i class="material-icons" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">keyboard_arrow_down</i>
                         <ul class="dropdown-menu pull-right">
@@ -442,7 +454,7 @@
 
     <!-- Jquery Validation Plugin Css -->
     <script src='<%= Page.ResolveUrl("~/plugins/jquery-validation/jquery.validate.js") %>'></script>
-    
+
     <!-- Moment Plugin Js -->
     <script src='<%= Page.ResolveUrl("~/plugins/momentjs/moment.js") %>'></script>
 
