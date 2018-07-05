@@ -38,7 +38,7 @@ public partial class Students_Default : System.Web.UI.Page
         {
             con.Open();
             string query = @"SELECT s.Code, s.AccountNo, s.LastName + ', ' + s.FirstName AS Name,
-                a.Email, s.Gender, s.DateAdded, s.DateModified, s.Status
+                a.Email, s.DateAdded, s.DateModified, s.Status
                 FROM Students s
                 INNER JOIN Account a ON s.AccountNo = a.AccountNo
                 WHERE a.Status!=@Status";

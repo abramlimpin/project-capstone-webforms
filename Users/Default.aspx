@@ -33,7 +33,6 @@
                                     <th>Type</th>
                                     <th>Name</th>
                                     <th>Email Address</th>
-                                    <th>Gender</th>
                                     <th>Date Added</th>
                                     <th>Last Modified</th>
                                     <th>Status</th>
@@ -45,7 +44,6 @@
                                     <th>Type</th>
                                     <th>Name</th>
                                     <th>Email Address</th>
-                                    <th>Gender</th>
                                     <th>Date Added</th>
                                     <th>Last Modified</th>
                                     <th>Status</th>
@@ -59,7 +57,6 @@
                                             <td><%# Eval("UserType") %></td>
                                             <td><%# Eval("Name") %></td>
                                             <td><%# Eval("Email") %></td>
-                                            <td><%# Eval("Gender") %></td>
                                             <td><%# Eval("DateAdded") %></td>
                                             <td><%# Eval("DateModified") %></td>
                                             <td><%# Eval("Status") %></td>

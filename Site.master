@@ -32,6 +32,9 @@
     <!-- Bootstrap Material Datetime Picker Css -->
     <link href="~/plugins/bootstrap-material-datetimepicker/css/bootstrap-material-datetimepicker.css" rel="stylesheet" />
 
+    <!-- Light Gallery Plugin Css -->
+    <link href="~/plugins/light-gallery/css/lightgallery.css" rel="stylesheet">
+
     <!-- Jasny Css -->
     <link href="~/css/jasny-bootstrap.min.css" rel="stylesheet">
 
@@ -272,12 +275,6 @@
                             <span>Advising</span>
                         </a>
                     </li>
-                    <li id="menu_directory" runat="server" visible="false">
-                        <a runat="server" href="~/Account/Advising">
-                            <i class="material-icons">assignment_ind</i>
-                            <span>Directory</span>
-                        </a>
-                    </li>
                     <li id="menu_users" runat="server" visible="false">
                         <a href="javascript:void(0);" class="menu-toggle">
                             <i class="material-icons">account_box</i>
@@ -292,6 +289,24 @@
                             <li>
                                 <a runat="server" href="~/Users/Add">
                                     <span>Add a User</span>
+                                </a>
+                            </li>
+                        </ul>
+                    </li>
+                    <li id="menu_directory" runat="server" visible="false">
+                        <a href="javascript:void(0);" class="menu-toggle">
+                            <i class="material-icons">account_box</i>
+                            <span>Directory</span>
+                        </a>
+                        <ul class="ml-menu">
+                            <li>
+                                <a runat="server" href="~/Directory/Advisers">
+                                    <span>Advisers List</span>
+                                </a>
+                            </li>
+                            <li>
+                                <a runat="server" href="#">
+                                    <span>Students List</span>
                                 </a>
                             </li>
                         </ul>
@@ -413,6 +428,16 @@
                                         </a>
                                     </li>
                                     <li>
+                                        <a runat="server" href="~/Admin/Teaching">
+                                            <span>Manage Teaching Topics</span>
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a runat="server" href="~/Admin/Research">
+                                            <span>Manage Research Topics</span>
+                                        </a>
+                                    </li>
+                                    <li>
                                         <a runat="server" href="~/Admin/Schools">
                                             <span>Manage Schools</span>
                                         </a>
@@ -497,6 +522,9 @@
     <script src='<%= Page.ResolveUrl("~/plugins/jquery-datatable/extensions/export/buttons.html5.min.js") %>'></script>
     <script src='<%= Page.ResolveUrl("~/plugins/jquery-datatable/extensions/export/buttons.print.min.js") %>'></script>
 
+     <!-- Light Gallery Plugin Js -->
+    <script src='<%= Page.ResolveUrl("~/plugins/light-gallery/js/lightgallery-all.js") %>'></script>
+
     <!-- Ckeditor -->
     <script src='<%= Page.ResolveUrl("~/plugins/ckeditor/ckeditor.js") %>'></script>
 
@@ -539,9 +567,10 @@
         });
 
         $(function () {
-            //CKEditor
-            CKEDITOR.replace('ckeditor');
-            CKEDITOR.config.height = 400;
+            $('#animated-thumbnails').lightGallery({
+                thumbnail: true,
+                selector: 'a'
+            });
         });
     </script>
     <!--Start of Tawk.to Script-->

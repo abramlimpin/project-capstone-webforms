@@ -21,7 +21,11 @@ public partial class adviser : System.Web.UI.Page
         {
             string accountNo = Request.QueryString["u"].ToString();
             GetInfo(accountNo);
+            GetTopics_Teaching(accountNo);
+            GetTopics_Research(accountNo);
             GetAffiliations(accountNo);
+            GetEducation(accountNo);
+            GetPortfolio(accountNo);
         }
     }
 
@@ -33,7 +37,7 @@ public partial class adviser : System.Web.UI.Page
             string query = @"SELECT f.FacultyID, f.Image, 
                 f.FirstName + ' ""' + f.Nickname + '"" ' + f.LastName AS Name,
                 a.Email, 
-                fa.StudioName, fa.Teaching, fa.Research,
+                fa.StudioName,
                 fa.Statement, fa.Resume, fa.Agenda, fa.Manifesto,
                 fa.Availability, fa.Others
                 FROM Faculty f 
@@ -57,9 +61,7 @@ public partial class adviser : System.Web.UI.Page
                             ltEmail.Text = data["Email"].ToString();
                             ltStudio.Text = data["StudioName"].ToString();
                             ltManifesto.Text = data["Manifesto"].ToString();
-
-                            ltTeaching.Text = data["Teaching"].ToString();
-                            ltResearch.Text = data["Research"].ToString();
+                            
                             ltStatement.Text = data["Statement"].ToString();
 
                             ltResume.Text = data["Resume"].ToString();
@@ -75,6 +77,48 @@ public partial class adviser : System.Web.UI.Page
                     {
                         Response.Redirect("~/");
                     }
+                }
+            }
+        }
+    }
+
+    void GetTopics_Teaching(string accountNo)
+    {
+        using (SqlConnection con = new SqlConnection(Helper.GetCon()))
+        {
+            con.Open();
+            string query = @"SELECT tt.Name FROM Faculty_Topics_Teaching ft
+                INNER JOIN Topics_Teaching tt ON ft.RecordID = tt.RecordID
+                INNER JOIN Faculty f ON ft.FacultyID = f.FacultyID
+                WHERE f.AccountNo=@AccountNo";
+            using (SqlCommand cmd = new SqlCommand(query, con))
+            {
+                cmd.Parameters.AddWithValue("@AccountNo", accountNo);
+                using (SqlDataReader data = cmd.ExecuteReader())
+                {
+                    lvTopics_Teaching.DataSource = data;
+                    lvTopics_Teaching.DataBind();
+                }
+            }
+        }
+    }
+
+    void GetTopics_Research(string accountNo)
+    {
+        using (SqlConnection con = new SqlConnection(Helper.GetCon()))
+        {
+            con.Open();
+            string query = @"SELECT tr.Name FROM Faculty_Topics_Research ft
+                INNER JOIN Topics_Research tr ON ft.RecordID = tr.RecordID
+                INNER JOIN Faculty f ON ft.FacultyID = f.FacultyID
+                WHERE f.AccountNo=@AccountNo";
+            using (SqlCommand cmd = new SqlCommand(query, con))
+            {
+                cmd.Parameters.AddWithValue("@AccountNo", accountNo);
+                using (SqlDataReader data = cmd.ExecuteReader())
+                {
+                    lvTopics_Research.DataSource = data;
+                    lvTopics_Research.DataBind();
                 }
             }
         }
@@ -96,6 +140,48 @@ public partial class adviser : System.Web.UI.Page
                 {
                     lvAffiliations.DataSource = data;
                     lvAffiliations.DataBind();
+                }
+            }
+        }
+    }
+
+    void GetEducation(string accountNo)
+    {
+        using (SqlConnection con = new SqlConnection(Helper.GetCon()))
+        {
+            con.Open();
+            string query = @"SELECT fe.Institution, fe.Degree,
+                fe.YearStart, fe.YearEnd
+                FROM Faculty_Education fe
+                INNER JOIN Faculty f ON fe.FacultyID = f.FacultyID
+                WHERE f.AccountNo=@AccountNo";
+            using (SqlCommand cmd = new SqlCommand(query, con))
+            {
+                cmd.Parameters.AddWithValue("@AccountNo", accountNo);
+                using (SqlDataReader data = cmd.ExecuteReader())
+                {
+                    lvEducation.DataSource = data;
+                    lvEducation.DataBind();
+                }
+            }
+        }
+    }
+
+    void GetPortfolio(string accountNo)
+    {
+        using (SqlConnection con = new SqlConnection(Helper.GetCon()))
+        {
+            con.Open();
+            string query = @"SELECT Code, Title, Image FROM Portfolio
+                WHERE AccountNo=@AccountNo AND Status=@Status";
+            using (SqlCommand cmd = new SqlCommand(query, con))
+            {
+                cmd.Parameters.AddWithValue("@AccountNo", accountNo);
+                cmd.Parameters.AddWithValue("@Status", "Published");
+                using (SqlDataReader data = cmd.ExecuteReader())
+                {
+                    lvPortfolio.DataSource = data;
+                    lvPortfolio.DataBind();
                 }
             }
         }

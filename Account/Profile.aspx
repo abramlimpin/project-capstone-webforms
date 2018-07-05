@@ -86,20 +86,6 @@
                             </div>
                         </div>
                         <div class="form-group">
-                            <div class="input-group">
-                                <span class="input-group-addon">
-                                    <i class="material-icons">wc</i>
-                                </span>
-                                <asp:DropDownList ID="ddlGender" runat="server" CssClass="form-control show-tick" required>
-                                    <asp:ListItem Text="Select gender..." Value="" />
-                                    <asp:ListItem>Female</asp:ListItem>
-                                    <asp:ListItem>Male</asp:ListItem>
-                                    <asp:ListItem Value="N/A">Not Specified</asp:ListItem>
-                                </asp:DropDownList>
-                            </div>
-
-                        </div>
-                        <div class="form-group">
                             <asp:Button ID="btnUpdate" runat="server" CssClass="btn btn-lg btn-success waves-effect" Text="Update" OnClick="btnUpdate_Click" />
                         </div>
                     </div>

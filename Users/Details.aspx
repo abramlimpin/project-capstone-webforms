@@ -57,12 +57,6 @@
                                 <label class="form-label">Program</label>
                             </div>
                         </div>
-                        <div class="form-group form-float">
-                            <div class="form-line">
-                                <asp:TextBox ID="txtGender" runat="server" CssClass="form-control" disabled />
-                                <label class="form-label">Gender</label>
-                            </div>
-                        </div>
                         <div class="form-group">
                             <asp:Button ID="btnUpdate" runat="server" CssClass="btn btn-lg btn-success waves-effect" Text="Update" OnClick="btnUpdate_Click" />
                             <a runat="server" href="~/Users" class="btn btn-lg btn-default waves-effect">Back to List</a>

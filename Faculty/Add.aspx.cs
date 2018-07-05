@@ -63,7 +63,7 @@ public partial class Faculty_Add : System.Web.UI.Page
 
                 string query2 = @"INSERT INTO Faculty VALUES
                     (@Code, @AccountNo, @ProgramID, @FirstName, @MiddleName, 
-                    @LastName, @Nickname, @Image, @Birthdate, @Gender,
+                    @LastName, @Nickname, @Image, @Birthdate,
                     @DateAdded, @DateModified, @Status)";
             
                 using (SqlCommand cmd = new SqlCommand(query2, con))
@@ -92,7 +92,6 @@ public partial class Faculty_Add : System.Web.UI.Page
                         cmd.Parameters.AddWithValue("@Birthdate", birthDate);
                     else
                         cmd.Parameters.AddWithValue("@Birthdate", DBNull.Value);
-                    cmd.Parameters.AddWithValue("@Gender", ddlGender.SelectedValue);
                     cmd.Parameters.AddWithValue("@DateAdded", DateTime.Now);
                     cmd.Parameters.AddWithValue("@DateModified", DBNull.Value);
                     cmd.Parameters.AddWithValue("@Status", "Active");

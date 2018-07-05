@@ -47,11 +47,10 @@ public partial class Users_Details : System.Web.UI.Page
         using (SqlConnection con = new SqlConnection(Helper.GetCon()))
         {
             con.Open();
-            string query = @"SELECT a.Status, at.UserType, a.AccountNo,
+            string query = @"SELECT a.Status, a.TypeID, at.UserType, a.AccountNo,
                 ISNULL(p.LastName, ISNULL(f.LastName, s.LastName)) AS LastName,
                 ISNULL(p.FirstName, ISNULL(f.FirstName, s.FirstName)) AS FirstName,
                 a.RoleID, a.Email, 
-                ISNULL(p.Gender, ISNULL(f.Gender, s.Gender)) AS Gender,
                 a.DateAdded, a.DateModified, a.Status
                 FROM Account a 
                 INNER JOIN Account_Type at ON a.TypeID = at.TypeID
@@ -70,6 +69,7 @@ public partial class Users_Details : System.Web.UI.Page
                         while (data.Read())
                         {
                             cboStatus.Checked = data["Status"].ToString() == "Active" ? true : false;
+                            btnArchive.Visible = data["TypeID"].ToString() == "1" ? false : true;
                             txtUserType.Text = data["UserType"].ToString();
                             txtUsername.Text = data["AccountNo"].ToString();
                             ltAccountNo.Text = data["AccountNo"].ToString();
@@ -79,7 +79,6 @@ public partial class Users_Details : System.Web.UI.Page
 
                             ddlRoles.SelectedValue = data["RoleID"].ToString();
                             // txtProgram.Text = data["Program"].ToString();
-                            txtGender.Text = data["Gender"].ToString();
                         }
                     }
                     else

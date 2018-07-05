@@ -28,8 +28,13 @@ public partial class Account_Advising : System.Web.UI.Page
         {
             AccessAdvising();
             GetInfo();
+            GetTopics_Teaching();
+            GetTopics_Research();
             GetAffiliations();
+            GetTopics_Teaching_Faculty();
+            GetTopics_Research_Faculty();
             GetAffiliations_Faculty();
+            GetEducation();
         }
     }
 
@@ -52,15 +57,28 @@ public partial class Account_Advising : System.Web.UI.Page
         }
     }
 
-    static bool accountExisting = false;
+    bool IsExisting()
+    {
+        using (SqlConnection con = new SqlConnection(Helper.GetCon()))
+        {
+            con.Open();
+            string query = @"SELECT FacultyID FROM Faculty_Advising
+                WHERE FacultyID = @FacultyID";
+            using (SqlCommand cmd = new SqlCommand(query, con))
+            {
+                cmd.Parameters.AddWithValue("@FacultyID", ltFacultyID.Text);
+                return cmd.ExecuteScalar() == null ? false : true;
+            }
+        }
+    }
 
     void GetInfo()
     {
         using (SqlConnection con = new SqlConnection(Helper.GetCon()))
         {
             con.Open();
-            string query = @"SELECT f.FirstName + ' ' + f.LastName AS Name,
-                f.FacultyID, fa.StudioName, fa.Teaching, fa.Research,
+            string query = @"SELECT f.AccountNo, f.FirstName + ' ' + f.LastName AS Name,
+                f.FacultyID, fa.StudioName,
                 fa.Statement, fa.Resume, fa.Agenda, fa.Manifesto,
                 fa.Availability, fa.Others
                 FROM Faculty f
@@ -73,17 +91,14 @@ public partial class Account_Advising : System.Web.UI.Page
                 {
                     while (data.Read())
                     {
+                        hlkProfile.NavigateUrl = "~/adviser?u=" + data["AccountNo"].ToString();
                         txtName.Text = data["Name"].ToString();
                         ltFacultyID.Text = data["FacultyID"].ToString();
-
-                        accountExisting = data["StudioName"].ToString() == "" ? false : true;
                         txtStudio.Text = data["StudioName"].ToString();
-                        txtTeaching.Text = data["Teaching"].ToString();
-                        txtResearch.Text = data["Research"].ToString();
                         txtStatement.Text = data["Statement"].ToString();
-                        txtResume.Text = data["Resume"].ToString();
-                        txtAgenda.Text = data["Agenda"].ToString();
-                        txtManifesto.Text = data["Manifesto"].ToString();
+                        txtResume.Text = Server.HtmlDecode(data["Resume"].ToString());
+                        txtAgenda.Text = Server.HtmlDecode(data["Agenda"].ToString());
+                        txtManifesto.Text = Server.HtmlDecode(data["Manifesto"].ToString());
                         txtAvailablity.Text = data["Availability"].ToString();
                         txtOthers.Text = data["Others"].ToString();
                     }
@@ -92,6 +107,22 @@ public partial class Account_Advising : System.Web.UI.Page
                 }
             }
         }
+    }
+
+    void GetTopics_Teaching()
+    {
+        cbTopics_Teaching.DataSource = DB.GetTopics_Teaching();
+        cbTopics_Teaching.DataTextField = "Name";
+        cbTopics_Teaching.DataValueField = "RecordID";
+        cbTopics_Teaching.DataBind();
+    }
+
+    void GetTopics_Research()
+    {
+        cbTopics_Research.DataSource = DB.GetTopics_Research();
+        cbTopics_Research.DataTextField = "Name";
+        cbTopics_Research.DataValueField = "RecordID";
+        cbTopics_Research.DataBind();
     }
 
     void GetAffiliations()
@@ -119,6 +150,70 @@ public partial class Account_Advising : System.Web.UI.Page
         }
     }
 
+    void AddTopic_Teaching(string recordID)
+    {
+        using (SqlConnection con = new SqlConnection(Helper.GetCon()))
+        {
+            con.Open();
+            string query = @"INSERT INTO Faculty_Topics_Teaching VALUES
+                (@FacultyID, @RecordID, @DateAdded)";
+            using (SqlCommand cmd = new SqlCommand(query, con))
+            {
+                cmd.Parameters.AddWithValue("@FacultyID", ltFacultyID.Text);
+                cmd.Parameters.AddWithValue("@RecordID", recordID);
+                cmd.Parameters.AddWithValue("@DateAdded", DateTime.Now);
+                cmd.ExecuteNonQuery();
+            }
+        }
+    }
+
+    void AddTopic_Research(string recordID)
+    {
+        using (SqlConnection con = new SqlConnection(Helper.GetCon()))
+        {
+            con.Open();
+            string query = @"INSERT INTO Faculty_Topics_Research VALUES
+                (@FacultyID, @RecordID, @DateAdded)";
+            using (SqlCommand cmd = new SqlCommand(query, con))
+            {
+                cmd.Parameters.AddWithValue("@FacultyID", ltFacultyID.Text);
+                cmd.Parameters.AddWithValue("@RecordID", recordID);
+                cmd.Parameters.AddWithValue("@DateAdded", DateTime.Now);
+                cmd.ExecuteNonQuery();
+            }
+        }
+    }
+
+    void DeleteAllTopics_Teaching()
+    {
+        using (SqlConnection con = new SqlConnection(Helper.GetCon()))
+        {
+            con.Open();
+            string query = @"DELETE FROM Faculty_Topics_Teaching 
+                WHERE FacultyID=@FacultyID";
+            using (SqlCommand cmd = new SqlCommand(query, con))
+            {
+                cmd.Parameters.AddWithValue("@FacultyID", ltFacultyID.Text);
+                cmd.ExecuteNonQuery();
+            }
+        }
+    }
+
+    void DeleteAllTopics_Research()
+    {
+        using (SqlConnection con = new SqlConnection(Helper.GetCon()))
+        {
+            con.Open();
+            string query = @"DELETE FROM Faculty_Topics_Research
+                WHERE FacultyID=@FacultyID";
+            using (SqlCommand cmd = new SqlCommand(query, con))
+            {
+                cmd.Parameters.AddWithValue("@FacultyID", ltFacultyID.Text);
+                cmd.ExecuteNonQuery();
+            }
+        }
+    }
+
     void DeleteAllAffiliations()
     {
         using (SqlConnection con = new SqlConnection(Helper.GetCon()))
@@ -130,6 +225,62 @@ public partial class Account_Advising : System.Web.UI.Page
             {
                 cmd.Parameters.AddWithValue("@FacultyID", ltFacultyID.Text);
                 cmd.ExecuteNonQuery();
+            }
+        }
+    }
+
+    void GetTopics_Teaching_Faculty()
+    {
+        using (SqlConnection con = new SqlConnection(Helper.GetCon()))
+        {
+            con.Open();
+            string query = @"SELECT RecordID FROM Faculty_Topics_Teaching
+                WHERE FacultyID=@FacultyID";
+            using (SqlCommand cmd = new SqlCommand(query, con))
+            {
+                cmd.Parameters.AddWithValue("@FacultyID", ltFacultyID.Text);
+                using (SqlDataReader data = cmd.ExecuteReader())
+                {
+                    if (data.HasRows)
+                    {
+                        while (data.Read())
+                        {
+                            foreach (ListItem item in cbTopics_Teaching.Items)
+                            {
+                                if (item.Value == data["RecordID"].ToString())
+                                    item.Selected = true;
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    void GetTopics_Research_Faculty()
+    {
+        using (SqlConnection con = new SqlConnection(Helper.GetCon()))
+        {
+            con.Open();
+            string query = @"SELECT RecordID FROM Faculty_Topics_Research
+                WHERE FacultyID=@FacultyID";
+            using (SqlCommand cmd = new SqlCommand(query, con))
+            {
+                cmd.Parameters.AddWithValue("@FacultyID", ltFacultyID.Text);
+                using (SqlDataReader data = cmd.ExecuteReader())
+                {
+                    if (data.HasRows)
+                    {
+                        while (data.Read())
+                        {
+                            foreach (ListItem item in cbTopics_Research.Items)
+                            {
+                                if (item.Value == data["RecordID"].ToString())
+                                    item.Selected = true;
+                            }
+                        }
+                    }
+                }
             }
         }
     }
@@ -162,25 +313,46 @@ public partial class Account_Advising : System.Web.UI.Page
         }
     }
 
+    void GetEducation()
+    {
+        using (SqlConnection con = new SqlConnection(Helper.GetCon()))
+        {
+            con.Open();
+            string query = @"SELECT RecordID, Institution, Degree,
+                YearStart, YearEnd
+                FROM Faculty_Education
+                WHERE FacultyID=@FacultyID";
+            using (SqlCommand cmd = new SqlCommand(query, con))
+            {
+                cmd.Parameters.AddWithValue("@FacultyID", ltFacultyID.Text);
+                using (SqlDataReader data = cmd.ExecuteReader())
+                {
+                    lvEducation.DataSource = data;
+                    lvEducation.DataBind();
+                }
+            }
+        }
+    }
+
     protected void btnUpdate_Click(object sender, EventArgs e)
     {
         using (SqlConnection con = new SqlConnection(Helper.GetCon()))
         {
             con.Open();
             string query = "";
-            if (accountExisting)
+            if (IsExisting())
             {
                 query = @"UPDATE Faculty_Advising SET StudioName=@StudioName,
-                    Teaching=@Teaching, Research=@Research, Statement=@Statement,
+                    Statement=@Statement,
                     Resume=@Resume, Agenda=@Agenda, Manifesto=@Manifesto,
-                    Availability=@Availability, Other=@Others,
+                    Availability=@Availability, Others=@Others,
                     DateModified=@DateModified
                     WHERE FacultyID=@FacultyID";
             }
             else
             {
                 query = @"INSERT INTO Faculty_Advising VALUES 
-                    (@FacultyID, @StudioName, @Teaching, @Research, @Statement,
+                    (@FacultyID, @StudioName, @Statement,
                     @Resume, @Agenda, @Manifesto, @Availability, @Others, 
                     @DateAdded, @DateModified)";
             }
@@ -188,23 +360,39 @@ public partial class Account_Advising : System.Web.UI.Page
             {
                 cmd.Parameters.AddWithValue("@FacultyID", ltFacultyID.Text);
                 cmd.Parameters.AddWithValue("@StudioName", txtStudio.Text);
-                cmd.Parameters.AddWithValue("@Teaching", txtTeaching.Text);
-                cmd.Parameters.AddWithValue("@Research", txtResearch.Text);
                 cmd.Parameters.AddWithValue("@Statement", txtStatement.Text);
-                cmd.Parameters.AddWithValue("@Resume", txtResume.Text);
-                cmd.Parameters.AddWithValue("@Agenda", txtAgenda.Text);
-                cmd.Parameters.AddWithValue("@Manifesto", txtManifesto.Text);
+                cmd.Parameters.AddWithValue("@Resume", Server.HtmlEncode(txtResume.Text));
+                cmd.Parameters.AddWithValue("@Agenda", Server.HtmlEncode(txtAgenda.Text));
+                cmd.Parameters.AddWithValue("@Manifesto", Server.HtmlEncode(txtManifesto.Text));
                 cmd.Parameters.AddWithValue("@Availability", txtAvailablity.Text);
                 cmd.Parameters.AddWithValue("@Others", txtOthers.Text);
                 cmd.Parameters.AddWithValue("@DateAdded", DateTime.Now);
-                if (accountExisting)
+                if (IsExisting())
                     cmd.Parameters.AddWithValue("@DateModified", DateTime.Now);
                 else
                     cmd.Parameters.AddWithValue("@DateModified", DBNull.Value);
 
                 cmd.ExecuteNonQuery();
 
+                DeleteAllTopics_Teaching();
+                DeleteAllTopics_Research();
                 DeleteAllAffiliations();
+
+                foreach (ListItem item in cbTopics_Teaching.Items)
+                {
+                    if (item.Selected)
+                    {
+                        AddTopic_Teaching(item.Value);
+                    }
+                }
+
+                foreach (ListItem item in cbTopics_Research.Items)
+                {
+                    if (item.Selected)
+                    {
+                        AddTopic_Research(item.Value);
+                    }
+                }
 
                 foreach (ListItem item in cbAffiliations.Items)
                 {
@@ -219,5 +407,58 @@ public partial class Account_Advising : System.Web.UI.Page
                 Response.Redirect("~/Account/Advising");
             }
         }
+    }
+
+    protected void btnAdd_Click(object sender, EventArgs e)
+    {
+        using (SqlConnection con = new SqlConnection(Helper.GetCon()))
+        {
+            con.Open();
+            string query = @"INSERT INTO Faculty_Education VALUES
+                (@FacultyID, @Institution, @Degree, @YearStart, @YearEnd,
+                @DateAdded)";
+            using (SqlCommand cmd = new SqlCommand(query, con))
+            {
+                cmd.Parameters.AddWithValue("@FacultyID", ltFacultyID.Text);
+                cmd.Parameters.AddWithValue("@Institution", txtInstitution.Text);
+                cmd.Parameters.AddWithValue("@Degree", txtDegree.Text);
+                cmd.Parameters.AddWithValue("@YearStart", txtStart.Text);
+                cmd.Parameters.AddWithValue("@YearEnd", txtEnd.Text);
+                cmd.Parameters.AddWithValue("@DateAdded", DateTime.Now);
+                cmd.ExecuteNonQuery();
+
+                Helper.Log("Add", "Added educational background.");
+                Session["update"] = "yes";
+                Response.Redirect("Advising");
+            }
+        }
+    }
+
+    protected void lvEducation_ItemCommand(object sender, ListViewCommandEventArgs e)
+    {
+        if (e.CommandName == "remove")
+        {
+            Literal ltRecordID = (Literal)e.Item.FindControl("ltRecordID");
+            using (SqlConnection con = new SqlConnection(Helper.GetCon()))
+            {
+                con.Open();
+                string query = @"DELETE FROM Faculty_Education
+                    WHERE RecordID=@RecordID";
+                using (SqlCommand cmd = new SqlCommand(query, con))
+                {
+                    cmd.Parameters.AddWithValue("@RecordID", ltRecordID.Text);
+                    cmd.ExecuteNonQuery();
+
+                    Helper.Log("Delete", "Removed educational background.");
+                    Session["update"] = "yes";
+                    Response.Redirect("Advising");
+                }
+            }
+        }
+    }
+
+    protected void cbTopics_Teaching_Other_CheckedChanged(object sender, EventArgs e)
+    {
+        txtTopics_Teaching_Other.Visible = cbTopics_Teaching_Other.Checked ? true : false;
     }
 }

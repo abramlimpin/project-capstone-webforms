@@ -46,7 +46,7 @@ public partial class Account_Profile : System.Web.UI.Page
             {
                 query = @"SELECT p.Image, p.AccountNo, a.Email,
                     p.FirstName, p.MiddleName, p.LastName, p.Nickname,
-                    p.Birthdate, p.Gender
+                    p.Birthdate
                     FROM Account a 
                     INNER JOIN Personnel p ON a.AccountNo = p.AccountNo
                     WHERE a.AccountNo=@AccountNo";
@@ -56,7 +56,7 @@ public partial class Account_Profile : System.Web.UI.Page
             {
                 query = @"SELECT f.Image, f.AccountNo, a.Email,
                     f.FirstName, f.MiddleName, f.LastName, f.Nickname,
-                    f.Birthdate, f.Gender
+                    f.Birthdate
                     FROM Account a 
                     INNER JOIN Faculty f ON a.AccountNo = f.AccountNo
                     WHERE a.AccountNo=@AccountNo";
@@ -85,7 +85,6 @@ public partial class Account_Profile : System.Web.UI.Page
                         {
                             txtBirthdate.Text = birthDate.ToString("yyyy-MM-dd");
                         }
-                        ddlGender.SelectedValue = data["Gender"].ToString();
                     }
                 }
             }
@@ -102,7 +101,7 @@ public partial class Account_Profile : System.Web.UI.Page
             {
                 query = @"UPDATE Personnel SET Image=@Image, MiddleName=@MiddleName,
                     Nickname=@Nickname,
-                    Birthdate=@Birthdate, Gender=@Gender, DateModified=@DateModified
+                    Birthdate=@Birthdate, DateModified=@DateModified
                     WHERE AccountNo=@AccountNo";
             }
             else if (Session["typeid"].ToString() == "2" ||
@@ -110,7 +109,7 @@ public partial class Account_Profile : System.Web.UI.Page
             {
                 query = @"UPDATE Faculty SET Image=@Image, MiddleName=@MiddleName,
                     Nickname=@Nickname,
-                    Birthdate=@Birthdate, Gender=@Gender, DateModified=@DateModified
+                    Birthdate=@Birthdate, DateModified=@DateModified
                     WHERE AccountNo=@AccountNo";
             }
             using (SqlCommand cmd = new SqlCommand(query, con))
@@ -130,7 +129,6 @@ public partial class Account_Profile : System.Web.UI.Page
                 cmd.Parameters.AddWithValue("@MiddleName", txtMN.Text);
                 cmd.Parameters.AddWithValue("@Nickname", txtNick.Text);
                 cmd.Parameters.AddWithValue("@Birthdate", txtBirthdate.Text);
-                cmd.Parameters.AddWithValue("@Gender", ddlGender.SelectedValue);
                 cmd.Parameters.AddWithValue("@DateModified", DateTime.Now);
                 cmd.Parameters.AddWithValue("@AccountNo", Session["accountno"].ToString());
                 cmd.ExecuteNonQuery();

@@ -30,7 +30,6 @@ public partial class Users_Default : System.Web.UI.Page
                 ISNULL(p.LastName, ISNULL(f.LastName, s.LastName)) + ', ' +
                 ISNULL(p.FirstName, ISNULL(f.FirstName, s.FirstName)) AS Name,
                 a.Email, 
-                ISNULL(p.Gender, ISNULL(f.Gender, s.Gender)) AS Gender,
                 a.DateAdded, a.DateModified, a.Status
                 FROM Account a 
                 INNER JOIN Account_Type at ON a.TypeID = at.TypeID

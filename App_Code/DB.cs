@@ -166,6 +166,50 @@ public class DB
         }
     }
 
+    public static DataTable GetTopics_Teaching()
+    {
+        using (SqlConnection con = new SqlConnection(Helper.GetCon()))
+        {
+            con.Open();
+            string query = @"SELECT RecordID, Name FROM Topics_Teaching
+                WHERE Status=@Status";
+            using (SqlCommand cmd = new SqlCommand(query, con))
+            {
+                cmd.Parameters.AddWithValue("@Status", "Active");
+                using (SqlDataReader data = cmd.ExecuteReader())
+                {
+                    using (DataTable dt = new DataTable())
+                    {
+                        dt.Load(data);
+                        return dt;
+                    }
+                }
+            }
+        }
+    }
+
+    public static DataTable GetTopics_Research()
+    {
+        using (SqlConnection con = new SqlConnection(Helper.GetCon()))
+        {
+            con.Open();
+            string query = @"SELECT RecordID, Name FROM Topics_Research
+                WHERE Status=@Status";
+            using (SqlCommand cmd = new SqlCommand(query, con))
+            {
+                cmd.Parameters.AddWithValue("@Status", "Active");
+                using (SqlDataReader data = cmd.ExecuteReader())
+                {
+                    using (DataTable dt = new DataTable())
+                    {
+                        dt.Load(data);
+                        return dt;
+                    }
+                }
+            }
+        }
+    }
+
     public static DataTable GetAffiliations()
     {
         using (SqlConnection con = new SqlConnection(Helper.GetCon()))

@@ -110,6 +110,18 @@ public partial class Users_Add : System.Web.UI.Page
                     cmd.Parameters.AddWithValue("@DateAdded", DateTime.Now);
                     cmd.Parameters.AddWithValue("@Status", "Active");
                     cmd.ExecuteNonQuery();
+                    
+                    string message = "Welcome, " + txtFN.Text + " " + txtLN.Text + "!<br/><br/>" +
+                        "Your account has been created. Please use the following credentials to sign in:<br/><br/>" +
+                        "Username: <strong>" + txtUsername.Text + "</strong> / <strong>" + txtEmail.Text + "</strong><br/>" +
+                        "Password: <strong>temppassword</strong><br/>" +
+                        "Website: <strong>https://project-capstone.azurewebsites.net</strong><br/><br/>" +
+                        "Please change your temporary password as soon as possible.<br/><br/>" +
+                        "Thank you.<br/><br/>" +
+                        "<hr/>"+
+                        "<small><em>Please do not reply to this email; this address is not monitored.</em></small>";
+                    Helper.SendEmail(txtEmail.Text, "Account Created", message);
+
                     Helper.Log("Add", "Added account '" + txtUsername.Text + "'.");
                     Session["add"] = "yes";
                     Response.Redirect("~/Users");

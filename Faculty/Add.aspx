@@ -78,14 +78,6 @@
                             </div>
                         </div>
                         <div class="form-group">
-                            <asp:DropDownList ID="ddlGender" runat="server" CssClass="form-control show-tick" required>
-                                <asp:ListItem Text="Select gender..." Value="" />
-                                <asp:ListItem>Female</asp:ListItem>
-                                <asp:ListItem>Male</asp:ListItem>
-                                <asp:ListItem Value="N/A">Not Specified</asp:ListItem>
-                            </asp:DropDownList>
-                        </div>
-                        <div class="form-group">
                             <asp:Button ID="btnAdd" runat="server" CssClass="btn btn-lg btn-success waves-effect" Text="Add" OnClick="btnAdd_Click" />
                         </div>
                     </form>

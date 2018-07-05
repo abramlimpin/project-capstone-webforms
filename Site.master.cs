@@ -102,6 +102,10 @@ public partial class Site : System.Web.UI.MasterPage
                                 menu_admin.Visible = true;
                             if (data["ModuleID"].ToString() == "11")
                                 menu_admin.Visible = true;
+                            if (data["ModuleID"].ToString() == "15")
+                                menu_admin.Visible = true;
+                            if (data["ModuleID"].ToString() == "16")
+                                menu_directory.Visible = true;
                         }
                     }
                 }
@@ -121,6 +125,8 @@ public partial class Site : System.Web.UI.MasterPage
                 menu_advising.Attributes.Add("class", "active");
             else if (Session["module"].ToString() == "Users")
                 menu_users.Attributes.Add("class", "active");
+            else if (Session["module"].ToString() == "Directory")
+                menu_directory.Attributes.Add("class", "active");
             else if (Session["module"].ToString() == "Students")
                 menu_students.Attributes.Add("class", "active");
             else if (Session["module"].ToString() == "Faculty")
@@ -163,12 +169,13 @@ public partial class Site : System.Web.UI.MasterPage
             con.Open();
             string query = @"SELECT TOP 5 LogType, Description, LogDate
                 FROM Logs
-                WHERE AccountNo = @AccountNo
+                WHERE AccountNo = @AccountNo AND LogType!=@LogType
                 ORDER BY LogDate DESC;";
             using (SqlCommand cmd = new SqlCommand(query, con))
             {
                 cmd.Parameters.AddWithValue("@AccountNo", Helper.Encrypt(Session["accountno"] == null ? "0" : 
                     Session["accountno"].ToString()));
+                cmd.Parameters.AddWithValue("@LogType", "Error");
                 using (SqlDataReader data = cmd.ExecuteReader())
                 {
                     lvNotifications.DataSource = data;

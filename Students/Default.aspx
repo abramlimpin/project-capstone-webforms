@@ -33,7 +33,6 @@
                                         <th>Student #</th>
                                         <th>Name</th>
                                         <th>Email Address</th>
-                                        <th>Gender</th>
                                         <th>Date Added</th>
                                         <th>Last Modified</th>
                                         <th>Status</th>
@@ -45,7 +44,6 @@
                                         <th>Student #</th>
                                         <th>Name</th>
                                         <th>Email Address</th>
-                                        <th>Gender</th>
                                         <th>Date Added</th>
                                         <th>Last Modified</th>
                                         <th>Status</th>
@@ -61,7 +59,6 @@
                                                     </a></td>
                                                 <td><%# Eval("Name") %></td>
                                                 <td><asp:Literal ID="ltEmail" runat="server" Text='<%# Eval("Email") %>' /></td>
-                                                <td><%# Eval("Gender") %></td>
                                                 <td><%# Eval("DateAdded") %></td>
                                                 <td><%# Eval("DateModified") %></td>
                                                 <td><%# Eval("Status") %></td>

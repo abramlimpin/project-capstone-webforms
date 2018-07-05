@@ -50,11 +50,23 @@
                             <div role="tabpanel" class="tab-pane fade active in" id="profile">
                                 <h2 class="card-inside-title">Teaching Topic Strengths</h2>
                                 <p>
-                                    <asp:Literal ID="ltTeaching" runat="server" />
+                                    <ul>
+                                        <asp:ListView ID="lvTopics_Teaching" runat="server">
+                                            <ItemTemplate>
+                                                <li><%# Eval("Name") %></li>
+                                            </ItemTemplate>
+                                        </asp:ListView>
+                                    </ul>
                                 </p>
                                 <h2 class="card-inside-title">Research Topic Guidance Strengths</h2>
                                 <p>
-                                    <asp:Literal ID="ltResearch" runat="server" />
+                                    <ul>
+                                        <asp:ListView ID="lvTopics_Research" runat="server">
+                                            <ItemTemplate>
+                                                <li><%# Eval("Name") %></li>
+                                            </ItemTemplate>
+                                        </asp:ListView>
+                                    </ul>
                                 </p>
                                 <h2 class="card-inside-title">Direction and Platform Affiliations</h2>
                                 <p>
@@ -70,6 +82,17 @@
                                 <p>
                                     <asp:Literal ID="ltStatement" runat="server" />
                                 </p>
+                                <h2 class="card-inside-title">Educational Background</h2>
+                                <p>
+                                    <ul>
+                                        <asp:ListView ID="lvEducation" runat="server">
+                                            <ItemTemplate>
+                                                <li><%# Eval("Degree") %> (<%# Eval("Institution") %>) <span class="label label-info"><%# Eval("YearStart", "{0: yyyy}") %></span></li>
+                                            </ItemTemplate>
+                                        </asp:ListView>
+                                    </ul>
+                                </p>
+
                             </div>
                             <div role="tabpanel" class="tab-pane fade" id="vitae">
                                 <h2 class="card-inside-title">Summary</h2>
@@ -81,13 +104,24 @@
                                     <asp:Literal ID="ltAgenda" runat="server" />
                                 </p>
                                 <asp:Panel ID="pnlOthers" runat="server" Visible="false">
-                                    <h2 class="card-inside-title">Other Statement</h2>
-                                <p>
-                                    <asp:Literal ID="ltOthers" runat="server" />
-                                </p>
+                                    <h2 class="card-inside-title">Additional Notes</h2>
+                                    <p>
+                                        <asp:Literal ID="ltOthers" runat="server" />
+                                    </p>
                                 </asp:Panel>
                             </div>
                             <div role="tabpanel" class="tab-pane fade" id="works">
+                                <div id="animated-thumbnails" class="list-unstyled row clearfix">
+                                    <asp:ListView ID="lvPortfolio" runat="server">
+                                        <ItemTemplate>
+                                            <div class="col-lg-3 col-md-4 col-sm-6 col-xs-12">
+                                                <a runat="server" href='<%# string.Concat("~/images/portfolio/", Eval("Image").ToString()) %>' data-sub-html='<%# Eval("Title") %>'>
+                                                    <img runat="server" class="img-responsive thumbnail" src='<%# string.Concat("~/images/portfolio/", Eval("Image")) %>'>
+                                                </a>
+                                            </div>
+                                        </ItemTemplate>
+                                    </asp:ListView>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -96,11 +130,11 @@
             <div class="col-lg-3">
                 <div class="card">
                     <div class="body">
-                        
-                                <h2 class="card-inside-title">Availability</h2>
-                                <p>
-                                    <asp:Literal ID="ltAvailability" runat="server" />
-                                </p>
+
+                        <h2 class="card-inside-title">Availability</h2>
+                        <p>
+                            <asp:Literal ID="ltAvailability" runat="server" />
+                        </p>
                         <asp:LinkButton ID="btnSelect" runat="server" CssClass="btn btn-lg btn-success btn-block waves-effect">
                             <i class="material-icons">add_to_photos</i><span>CHOOSE AS ADVISER</span>
                         </asp:LinkButton>
