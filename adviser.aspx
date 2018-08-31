@@ -5,12 +5,18 @@
 <asp:Content ID="Content2" ContentPlaceHolderID="content" runat="Server">
     <div class="row clearfix">
         <form runat="server" class="form-validate">
+            <div class="col-lg-12">
+                <div id="error" runat="server" class="alert alert-danger">
+                    Adviser already selected.
+                </div>
+            </div>
             <div class="col-lg-9">
                 <div class="card">
                     <div class="body clearfix">
                         <asp:Image ID="imgUser" runat="server" CssClass="img-responsive col-lg-2" />
                         <div class="col-lg-10">
                             <h2>
+                                <asp:Literal ID="ltFacultyID" runat="server" Visible="false" />
                                 <asp:Literal ID="ltName" runat="server" /></h2>
                             <h5>Email:
                                 <asp:Literal ID="ltEmail" runat="server" /></h5>
@@ -18,7 +24,7 @@
                                 <asp:Literal ID="ltStudio" runat="server" /></h5>
                             <blockquote class="m-b-15">
                                 <p>
-                                    <asp:Literal ID="ltManifesto" runat="server" />
+                                    <asp:Literal ID="ltAgenda" runat="server" />
                                 </p>
                             </blockquote>
                         </div>
@@ -55,6 +61,9 @@
                                             <ItemTemplate>
                                                 <li><%# Eval("Name") %></li>
                                             </ItemTemplate>
+                                            <EmptyDataTemplate>
+                                                <li>No records found.</li>
+                                            </EmptyDataTemplate>
                                         </asp:ListView>
                                     </ul>
                                 </p>
@@ -65,16 +74,35 @@
                                             <ItemTemplate>
                                                 <li><%# Eval("Name") %></li>
                                             </ItemTemplate>
+                                            <EmptyDataTemplate>
+                                                <li>No records found.</li>
+                                            </EmptyDataTemplate>
                                         </asp:ListView>
                                     </ul>
                                 </p>
-                                <h2 class="card-inside-title">Direction and Platform Affiliations</h2>
+                                <h2 class="card-inside-title">Directions</h2>
+                                <p>
+                                    <ul>
+                                        <asp:ListView ID="lvDirections" runat="server">
+                                            <ItemTemplate>
+                                                <li><%# Eval("Name") %></li>
+                                            </ItemTemplate>
+                                            <EmptyDataTemplate>
+                                                <li>No records found.</li>
+                                            </EmptyDataTemplate>
+                                        </asp:ListView>
+                                    </ul>
+                                </p>
+                                <h2 class="card-inside-title">Platform Affiliations</h2>
                                 <p>
                                     <ul>
                                         <asp:ListView ID="lvAffiliations" runat="server">
                                             <ItemTemplate>
                                                 <li><%# Eval("Name") %></li>
                                             </ItemTemplate>
+                                            <EmptyDataTemplate>
+                                                <li>No records found.</li>
+                                            </EmptyDataTemplate>
                                         </asp:ListView>
                                     </ul>
                                 </p>
@@ -89,19 +117,21 @@
                                             <ItemTemplate>
                                                 <li><%# Eval("Degree") %> (<%# Eval("Institution") %>) <span class="label label-info"><%# Eval("YearStart", "{0: yyyy}") %></span></li>
                                             </ItemTemplate>
+                                            <EmptyDataTemplate>
+                                                <li>No records found.</li>
+                                            </EmptyDataTemplate>
                                         </asp:ListView>
                                     </ul>
                                 </p>
-
                             </div>
                             <div role="tabpanel" class="tab-pane fade" id="vitae">
                                 <h2 class="card-inside-title">Summary</h2>
                                 <p>
                                     <asp:Literal ID="ltResume" runat="server" />
                                 </p>
-                                <h2 class="card-inside-title">General Studio Agenda</h2>
+                                <h2 class="card-inside-title">Abridged Manifesto</h2>
                                 <p>
-                                    <asp:Literal ID="ltAgenda" runat="server" />
+                                    <asp:Literal ID="ltManifesto" runat="server" />
                                 </p>
                                 <asp:Panel ID="pnlOthers" runat="server" Visible="false">
                                     <h2 class="card-inside-title">Additional Notes</h2>
@@ -120,6 +150,13 @@
                                                 </a>
                                             </div>
                                         </ItemTemplate>
+                                        <EmptyDataTemplate>
+                                            <div class="col-lg-12">
+                                                <div class="well">
+                                                    <h2 class="text-center">No records found.</h2>
+                                                </div>
+                                            </div>
+                                        </EmptyDataTemplate>
                                     </asp:ListView>
                                 </div>
                             </div>
@@ -133,9 +170,18 @@
 
                         <h2 class="card-inside-title">Availability</h2>
                         <p>
-                            <asp:Literal ID="ltAvailability" runat="server" />
+                            <ul>
+                                <asp:ListView ID="lvSchedule" runat="server">
+                                    <ItemTemplate>
+                                        <li><%# Eval("Day") %> (<%# Eval("StartTime", "{0:hh:mm tt}") %> - <%# Eval("EndTime", "{0:hh:mm tt}") %>)</li>
+                                    </ItemTemplate>
+                                    <EmptyDataTemplate>
+                                        <li>No records found.</li>
+                                    </EmptyDataTemplate>
+                                </asp:ListView>
+                            </ul>
                         </p>
-                        <asp:LinkButton ID="btnSelect" runat="server" CssClass="btn btn-lg btn-success btn-block waves-effect">
+                        <asp:LinkButton ID="btnSelect" runat="server" CssClass="btn btn-lg btn-success btn-block waves-effect" OnClick="btnSelect_Click">
                             <i class="material-icons">add_to_photos</i><span>CHOOSE AS ADVISER</span>
                         </asp:LinkButton>
                     </div>

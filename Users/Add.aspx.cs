@@ -84,10 +84,9 @@ public partial class Users_Add : System.Web.UI.Page
                     ddlTypes.SelectedIndex == 3) // Personnel & Faculty
                 {
                     query2 = @"INSERT INTO Faculty
-                        Code, AccountNo, ProgramID, FirstName, LastName,
-                        Gender, DateAdded, Status)
+                        (Code, AccountNo, ProgramID, FirstName, LastName, DateAdded, Status)
                         VALUES
-                        (@Code, @AccountNo, @ProgramID, @FirstName, @LastName, @Gender,
+                        (@Code, @AccountNo, @ProgramID, @FirstName, @LastName,
                         @DateAdded, @Status)";
                 }
                 else

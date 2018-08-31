@@ -27,7 +27,8 @@
     void Application_Error(object sender, EventArgs e) 
     { 
         Exception exc = Server.GetLastError();
-        Helper.Log("Error", Server.HtmlEncode(exc.Message));
+        Helper.Log("Error", Server.HtmlEncode(exc.Message + " - " +
+            exc.InnerException.Message));
     }
 
     void Session_Start(object sender, EventArgs e) 

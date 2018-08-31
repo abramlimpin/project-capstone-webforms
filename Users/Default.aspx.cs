@@ -48,4 +48,40 @@ public partial class Users_Default : System.Web.UI.Page
             }
         }
     }
+
+    protected void lvRecords_ItemCommand(object sender, ListViewCommandEventArgs e)
+    {
+        if (e.CommandName == "reset")
+        {
+            Literal ltAccountNo = (Literal)e.Item.FindControl("ltAccountNo");
+            Literal ltName = (Literal)e.Item.FindControl("ltName");
+            Literal ltEmail = (Literal)e.Item.FindControl("ltEmail");
+
+            using (SqlConnection con = new SqlConnection(Helper.GetCon()))
+            {
+                con.Open();
+                string query = @"UPDATE Account SET Password=@Password,
+                        DateModified=@DateModified
+                        WHERE AccountNo=@AccountNo";
+                using (SqlCommand cmd = new SqlCommand(query, con))
+                {
+                    cmd.Parameters.AddWithValue("@Password", Helper.Hash("temppassword"));
+                    cmd.Parameters.AddWithValue("@DateModified", DateTime.Now);
+                    cmd.Parameters.AddWithValue("@AccountNo", ltAccountNo.Text);
+                    cmd.ExecuteNonQuery();
+
+                    Helper.Log("Account", "Password reset.");
+                    Session["reset"] = "yes";
+                    string URL = Helper.GetURL() + "Account/SignIn";
+
+                    string message = "Dear " + ltAccountNo.Text + ",<br/><br/>" +
+                        "Your password has been reset to <strong>temppassword</strong>.<br/><br/."+
+                        "Click the link below to sign in:<br/>" +
+                        "<a href='" + URL + "'>" + URL + "</a>";
+                    Helper.SendEmail(ltEmail.Text, "Password Reset", message);
+                    Response.Redirect("~/Users/");
+                }
+            }
+        }
+    }
 }

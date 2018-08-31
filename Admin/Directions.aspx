@@ -1,4 +1,4 @@
-﻿<%@ Page Title="" Language="C#" MasterPageFile="~/Site.master" AutoEventWireup="true" CodeFile="Affiliations.aspx.cs" Inherits="Admin_Affiliations" %>
+﻿<%@ Page Title="" Language="C#" MasterPageFile="~/Site.master" AutoEventWireup="true" CodeFile="Directions.aspx.cs" Inherits="Admin_Directions" %>
 
 <asp:Content ID="Content1" ContentPlaceHolderID="title" runat="Server">
 </asp:Content>
@@ -7,7 +7,7 @@
     <div class="row clearfix">
         <div class="col-lg-12">
             <div class="header">
-                <h2>MANAGE PLATFORM AFFILIATIONS</h2>
+                <h2>MANAGE DIRECTIONS</h2>
             </div>
         </div>
     </div>
@@ -49,7 +49,7 @@
                             <asp:ListView ID="lvRecords" runat="server">
                                 <ItemTemplate>
                                     <tr>
-                                        <td><%# Eval("AffID") %></td>
+                                        <td><%# Eval("DirectID") %></td>
                                         <td><%# Eval("Name") %></td>
                                         <td><%# Eval("DateAdded") %></td>
                                         <td><%# Eval("DateModified") %></td>

@@ -6,13 +6,13 @@ using System.Web;
 using System.Web.UI;
 using System.Web.UI.WebControls;
 
-public partial class Admin_Affiliations : System.Web.UI.Page
+public partial class Admin_Directions : System.Web.UI.Page
 {
     protected void Page_Load(object sender, EventArgs e)
     {
         Helper.ValidateUser();
         Session["module"] = "Admin";
-        Session["page"] = "Manage Platform Affiliations";
+        Session["page"] = "Manage Directions";
 
         if (!IsPostBack)
         {
@@ -25,8 +25,8 @@ public partial class Admin_Affiliations : System.Web.UI.Page
         using (SqlConnection con = new SqlConnection(Helper.GetCon()))
         {
             con.Open();
-            string query = @"SELECT AffID, Code, Name, DateAdded, DateModified, Status
-                FROM Affiliations";
+            string query = @"SELECT DirectID, Code, Name, DateAdded, DateModified, Status
+                FROM Directions";
             using (SqlCommand cmd = new SqlCommand(query, con))
             {
                 cmd.Parameters.AddWithValue("@Status", "Archived");
@@ -43,12 +43,12 @@ public partial class Admin_Affiliations : System.Web.UI.Page
     {
         using (SqlConnection con = new SqlConnection(Helper.GetCon()))
         {
-            int affID = 0;
+            int directID = 0;
             con.Open();
-            string query = @"INSERT INTO Affiliations VALUES
+            string query = @"INSERT INTO Directions VALUES
                 (@Code, @Name, @DateAdded, @DateModified, @Status);
-                SELECT TOP 1 AffID FROM Affiliations
-                ORDER BY AffID DESC;";
+                SELECT TOP 1 DirectID FROM Directions
+                ORDER BY DirectID DESC;";
             using (SqlCommand cmd = new SqlCommand(query, con))
             {
                 cmd.Parameters.AddWithValue("@Code", Guid.NewGuid().ToString());
@@ -56,8 +56,8 @@ public partial class Admin_Affiliations : System.Web.UI.Page
                 cmd.Parameters.AddWithValue("@DateAdded", DateTime.Now);
                 cmd.Parameters.AddWithValue("@DateModified", DBNull.Value);
                 cmd.Parameters.AddWithValue("@Status", "Active");
-                affID = (int)cmd.ExecuteScalar();
-                Helper.Log("Add", "Added affiliation id '" + affID.ToString() + "'.");
+                directID = (int)cmd.ExecuteScalar();
+                Helper.Log("Add", "Added direction id '" + directID.ToString() + "'.");
                 update.Visible = true;
                 GetModules();
                 txtName.Text = string.Empty;

@@ -40,12 +40,15 @@
                                 </tr>
                             </tfoot>
                             <tbody>
-                                <asp:ListView ID="lvRecords" runat="server">
+                                <asp:ListView ID="lvRecords" runat="server" OnItemDataBound="lvRecords_ItemDataBound">
                                     <ItemTemplate>
                                         <tr>
                                             <td><%# Helper.Decrypt(Eval("AccountNo").ToString()) == "0" ? "Administrator" : Helper.Decrypt(Eval("AccountNo").ToString()) %></td>
                                             <td><%# Helper.Decrypt(Eval("LogType").ToString()) %></td>
-                                            <td><%# Helper.Decrypt(Eval("Description").ToString()) %></td>
+                                            <td>
+                                                <asp:Literal ID="ltDesc" runat="server" />
+                                                <asp:Literal ID="ltDesc_Enc" runat="server" Text='<%# Eval("Description").ToString() %>' Visible="false" />
+                                            </td>
                                             <td><%# Eval("LogDate") %></td>
                                         </tr>
                                     </ItemTemplate>

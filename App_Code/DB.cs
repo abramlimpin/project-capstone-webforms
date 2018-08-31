@@ -172,10 +172,32 @@ public class DB
         {
             con.Open();
             string query = @"SELECT RecordID, Name FROM Topics_Teaching
-                WHERE Status=@Status";
+                WHERE Status=@Status
+                ORDER BY Name";
             using (SqlCommand cmd = new SqlCommand(query, con))
             {
                 cmd.Parameters.AddWithValue("@Status", "Active");
+                using (SqlDataReader data = cmd.ExecuteReader())
+                {
+                    using (DataTable dt = new DataTable())
+                    {
+                        dt.Load(data);
+                        return dt;
+                    }
+                }
+            }
+        }
+    }
+
+    public static DataTable GetDirections()
+    {
+        using (SqlConnection con = new SqlConnection(Helper.GetCon()))
+        {
+            con.Open();
+            string query = @"SELECT DirectID, Name FROM Directions
+                ORDER BY Name";
+            using (SqlCommand cmd = new SqlCommand(query, con))
+            {
                 using (SqlDataReader data = cmd.ExecuteReader())
                 {
                     using (DataTable dt = new DataTable())
@@ -194,7 +216,8 @@ public class DB
         {
             con.Open();
             string query = @"SELECT RecordID, Name FROM Topics_Research
-                WHERE Status=@Status";
+                WHERE Status=@Status
+                ORDER BY Name";
             using (SqlCommand cmd = new SqlCommand(query, con))
             {
                 cmd.Parameters.AddWithValue("@Status", "Active");
@@ -215,7 +238,8 @@ public class DB
         using (SqlConnection con = new SqlConnection(Helper.GetCon()))
         {
             con.Open();
-            string query = @"SELECT AffID, Name FROM Affiliations";
+            string query = @"SELECT AffID, Name FROM Affiliations
+                ORDER BY Name";
             using (SqlCommand cmd = new SqlCommand(query, con))
             {
                 using (SqlDataReader data = cmd.ExecuteReader())

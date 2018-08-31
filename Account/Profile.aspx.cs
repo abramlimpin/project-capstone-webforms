@@ -61,6 +61,15 @@ public partial class Account_Profile : System.Web.UI.Page
                     INNER JOIN Faculty f ON a.AccountNo = f.AccountNo
                     WHERE a.AccountNo=@AccountNo";
             }
+            else
+            {
+                query = @"SELECT s.Image, a.AccountNo, a.Email,
+                    s.FirstName, s.MiddleName, s.LastName, s.Nickname,
+                    s.Birthdate
+                    FROM Account a 
+                    INNER JOIN Students s ON a.AccountNo = s.AccountNo
+                    WHERE a.AccountNo=@AccountNo";
+            }
             using (SqlCommand cmd = new SqlCommand(query, con))
             {
                 cmd.Parameters.AddWithValue("@AccountNo", Session["accountno"].ToString());
@@ -108,6 +117,13 @@ public partial class Account_Profile : System.Web.UI.Page
                 Session["typeid"].ToString() == "3")
             {
                 query = @"UPDATE Faculty SET Image=@Image, MiddleName=@MiddleName,
+                    Nickname=@Nickname,
+                    Birthdate=@Birthdate, DateModified=@DateModified
+                    WHERE AccountNo=@AccountNo";
+            }
+            else
+            {
+                query = @"UPDATE Students SET Image=@Image, MiddleName=@MiddleName,
                     Nickname=@Nickname,
                     Birthdate=@Birthdate, DateModified=@DateModified
                     WHERE AccountNo=@AccountNo";

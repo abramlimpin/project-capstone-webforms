@@ -64,6 +64,7 @@ public partial class Account_SignIn : System.Web.UI.Page
                     }
                     else
                     {
+                        txtPassword.Text = string.Empty;
                         error.Visible = true;
                     }
                 }

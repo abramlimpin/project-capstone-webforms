@@ -13,7 +13,7 @@ public partial class adviser : System.Web.UI.Page
         Helper.ValidateUser();
         Session["module"] = "Directory";
 
-        if (Request.QueryString["u"]== null)
+        if (Request.QueryString["u"] == null)
         {
             Response.Redirect("~/");
         }
@@ -23,23 +23,27 @@ public partial class adviser : System.Web.UI.Page
             GetInfo(accountNo);
             GetTopics_Teaching(accountNo);
             GetTopics_Research(accountNo);
+            GetDirecions(accountNo);
             GetAffiliations(accountNo);
             GetEducation(accountNo);
             GetPortfolio(accountNo);
+            GetSchedule(accountNo);
+            ToggleButton();
         }
     }
 
+    
     void GetInfo(string accountNo)
     {
         using (SqlConnection con = new SqlConnection(Helper.GetCon()))
         {
             con.Open();
             string query = @"SELECT f.FacultyID, f.Image, 
-                f.FirstName + ' ""' + f.Nickname + '"" ' + f.LastName AS Name,
+                f.FirstName, f.Nickname, f.LastName,
                 a.Email, 
                 fa.StudioName,
                 fa.Statement, fa.Resume, fa.Agenda, fa.Manifesto,
-                fa.Availability, fa.Others
+                fa.Others
                 FROM Faculty f 
                 INNER JOIN Account a ON f.AccountNo = a.AccountNo
                 INNER JOIN Faculty_Advising fa ON f.FacultyID = fa.FacultyID
@@ -56,21 +60,24 @@ public partial class adviser : System.Web.UI.Page
                         {
                             imgUser.ImageUrl = data["Image"].ToString() == "" ? "~/images/user-placeholder.jpg" :
                                 "~/images/users/" + data["Image"].ToString();
-                            Session["page"] = data["Name"].ToString();
-                            ltName.Text = data["Name"].ToString();
+                            
+                            ltFacultyID.Text = data["FacultyID"].ToString();
+                            if (data["Nickname"].ToString() == "")
+                                ltName.Text = data["FirstName"].ToString() + " " + data["LastName"].ToString();
+                            else
+                                ltName.Text = data["FirstName"].ToString() + " \"" + data["Nickname"].ToString() + "\" " + data["LastName"].ToString();
+                            Session["page"] = ltName.Text;
                             ltEmail.Text = data["Email"].ToString();
                             ltStudio.Text = data["StudioName"].ToString();
-                            ltManifesto.Text = data["Manifesto"].ToString();
-                            
+                            ltManifesto.Text = Server.HtmlDecode(data["Manifesto"].ToString());
+
                             ltStatement.Text = data["Statement"].ToString();
 
-                            ltResume.Text = data["Resume"].ToString();
-                            ltAgenda.Text = data["Agenda"].ToString();
-                            ltOthers.Text = data["Others"].ToString();
+                            ltResume.Text = Server.HtmlDecode(data["Resume"].ToString());
+                            ltAgenda.Text = Server.HtmlDecode(data["Agenda"].ToString());
+                            ltOthers.Text = Server.HtmlDecode(data["Others"].ToString());
 
                             pnlOthers.Visible = ltOthers.Text == "" ? false : true;
-
-                            ltAvailability.Text = data["Availability"].ToString();
                         }
                     }
                     else
@@ -119,6 +126,27 @@ public partial class adviser : System.Web.UI.Page
                 {
                     lvTopics_Research.DataSource = data;
                     lvTopics_Research.DataBind();
+                }
+            }
+        }
+    }
+
+    void GetDirecions(string accountNo)
+    {
+        using (SqlConnection con = new SqlConnection(Helper.GetCon()))
+        {
+            con.Open();
+            string query = @"SELECT d.Name FROM Faculty_Directions fd
+                INNER JOIN Directions d ON fd.DirectID = d.DirectID
+                INNER JOIN Faculty f ON fd.FacultyID = f.FacultyID
+                WHERE f.AccountNo=@AccountNo";
+            using (SqlCommand cmd = new SqlCommand(query, con))
+            {
+                cmd.Parameters.AddWithValue("@AccountNo", accountNo);
+                using (SqlDataReader data = cmd.ExecuteReader())
+                {
+                    lvDirections.DataSource = data;
+                    lvDirections.DataBind();
                 }
             }
         }
@@ -185,5 +213,85 @@ public partial class adviser : System.Web.UI.Page
                 }
             }
         }
+    }
+
+    void GetSchedule(string accountNo)
+    {
+        using (SqlConnection con = new SqlConnection(Helper.GetCon()))
+        {
+            con.Open();
+            string query = @"SELECT fa.Day, fa.StartTime,
+                fa. EndTime
+                FROM Faculty_Availability fa
+               INNER JOIN Faculty f ON fa.FacultyID = f.FacultyID
+                WHERE f.AccountNo=@AccountNo";
+            using (SqlCommand cmd = new SqlCommand(query, con))
+            {
+                cmd.Parameters.AddWithValue("@AccountNo", accountNo);
+                using (SqlDataReader data = cmd.ExecuteReader())
+                {
+                    lvSchedule.DataSource = data;
+                    lvSchedule.DataBind();
+                }
+            }
+        }
+    }
+
+
+    void ToggleButton()
+    {
+        if (Session["typeid"].ToString() == "4")
+        {
+            btnSelect.Visible = true;
+        }
+        else
+            btnSelect.Visible = false;
+    }
+
+    bool IsExisting(string facultyID)
+    {
+        using (SqlConnection con = new SqlConnection(Helper.GetCon()))
+        {
+            con.Open();
+            string query = @"SELECT e.EnlistID FROM Enlistment e
+                INNER JOIN Students s ON e.AccountNo = s.AccountNo
+                WHERE s.AccountNo=@AccountNo AND e.FacultyID=@FacultyID";
+            using (SqlCommand cmd = new SqlCommand(query, con))
+            {
+                cmd.Parameters.AddWithValue("@AccountNo", Session["accountno"].ToString());
+                cmd.Parameters.AddWithValue("@FacultyID", facultyID);
+                return cmd.ExecuteScalar() == null ? false : true;
+            }
+        }
+    }
+
+    protected void btnSelect_Click(object sender, EventArgs e)
+    {
+        if (IsExisting(ltFacultyID.Text))
+        {
+            error.Visible = true;
+        }
+        else
+        {
+            error.Visible = false;
+            using (SqlConnection con = new SqlConnection(Helper.GetCon()))
+            {
+                con.Open();
+                string query = @"INSERT INTO Enlistment VALUES
+                    (@AccountNo, @FacultyID, @DateAdded, @DateModified, @Status)";
+                using (SqlCommand cmd = new SqlCommand(query, con))
+                {
+                    cmd.Parameters.AddWithValue("@AccountNo", Session["accountno"].ToString());
+                    cmd.Parameters.AddWithValue("@FacultyID", ltFacultyID.Text);
+                    cmd.Parameters.AddWithValue("@DateAdded", DateTime.Now);
+                    cmd.Parameters.AddWithValue("@DateModified", DBNull.Value);
+                    cmd.Parameters.AddWithValue("@Status", "Active");
+                    cmd.ExecuteNonQuery();
+                    Helper.Log("Add", "Added enlistment record.");
+                    Response.Redirect("~/Account/Enlistment");
+                }
+            }
+        }
+
     }
 }

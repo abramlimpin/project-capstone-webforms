@@ -4,6 +4,7 @@ using System.Data.SqlClient;
 using System.Linq;
 using System.Web;
 using System.Web.UI;
+using System.Web.UI.HtmlControls;
 using System.Web.UI.WebControls;
 
 public partial class Directory_Advisers : System.Web.UI.Page
@@ -16,6 +17,7 @@ public partial class Directory_Advisers : System.Web.UI.Page
 
         GetTopics_Teaching();
         GetTopics_Research();
+        GetDirections();
         GetAffiliations();
 
         if (Request.QueryString["t"] != null &&
@@ -38,6 +40,16 @@ public partial class Directory_Advisers : System.Web.UI.Page
                 foreach (ListItem item in cbTopics_Research.Items)
                 {
                     if (item.Value == topics_research[x])
+                        item.Selected = true;
+                }
+            }
+
+            string[] directions = Request.QueryString["a"].ToString().Split(',');
+            for (int x = 0; x < directions.Length; x++)
+            {
+                foreach (ListItem item in cbDirections.Items)
+                {
+                    if (item.Value == directions[x])
                         item.Selected = true;
                 }
             }
@@ -83,6 +95,14 @@ public partial class Directory_Advisers : System.Web.UI.Page
         cbTopics_Research.DataBind();
     }
 
+    void GetDirections()
+    {
+        cbDirections.DataSource = DB.GetDirections();
+        cbDirections.DataTextField = "Name";
+        cbDirections.DataValueField = "DirectID";
+        cbDirections.DataBind();
+    }
+
     void GetAffiliations()
     {
         cbAffiliations.DataSource = DB.GetAffiliations();
@@ -99,9 +119,8 @@ public partial class Directory_Advisers : System.Web.UI.Page
             string query = @"SELECT DISTINCT(f.AccountNo), 
                 f.LastName + ', ' + f.FirstName AS Name,
                 f.Image
-                FROM Faculty_Slots fs
-                INNER JOIN Faculty f ON fs.FacultyID = f.FacultyID
-                WHERE fs.Status = @Status AND f.Status = @Status
+                FROM Faculty f
+                WHERE f.Status = @Status
                 ORDER BY f.AccountNo, Name, f.Image";
             using (SqlCommand cmd = new SqlCommand(query, con))
             {
@@ -132,5 +151,24 @@ public partial class Directory_Advisers : System.Web.UI.Page
         Response.Redirect("Advisers?t=" + selected_topic_teaching + "&r=" +
             selected_topic_research + "&a=" +
             select_affiliations);
+    }
+
+    protected void lvAdvisers_ItemDataBound(object sender, ListViewItemEventArgs e)
+    {
+        if (e.Item.ItemType == ListViewItemType.DataItem)
+        {
+            Literal ltImage = (Literal)e.Item.FindControl("ltImage");
+            HtmlGenericControl ratio = (HtmlGenericControl)e.Item.FindControl("ratio");
+
+            string URL = Helper.GetURL();
+            if (ltImage.Text == "")
+            {
+                ratio.Attributes.Add("style", "background-image: url('" + URL + "images/user-placeholder.jpg" + "')");
+            }
+            else
+            {
+                ratio.Attributes.Add("style", "background-image: url('" + URL + "images/users/" + ltImage.Text + "')");
+            }
+        }
     }
 }

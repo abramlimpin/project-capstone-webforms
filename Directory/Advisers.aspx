@@ -11,7 +11,12 @@
                     <div class="body">
                         <div class="form-group form-float">
                             <div class="form-line">
-                                <label>Teaching Topic Strengths</label>
+                                <asp:TextBox ID="txtKeyword" runat="server" CssClass="form-control" placeholder="Keyword..." />
+                            </div>
+                        </div>
+                        <div class="form-group form-float">
+                            <div class="form-line">
+                                <label>Mentor Teaching Topics</label>
                                 <div class="checkbox">
                                     <asp:CheckBoxList ID="cbTopics_Teaching" runat="server" RepeatLayout="Table" required />
                                 </div>
@@ -19,7 +24,7 @@
                         </div>
                         <div class="form-group form-float">
                             <div class="form-line">
-                                <label>Research Topic Guidance Strengths</label>
+                                <label>Mentor Research Topics</label>
                                 <div class="checkbox">
                                     <asp:CheckBoxList ID="cbTopics_Research" runat="server" RepeatLayout="Table" required />
                                 </div>
@@ -27,7 +32,15 @@
                         </div>
                         <div class="form-group form-float">
                             <div class="form-line">
-                                <label>Direction and Platform Affiliations</label>
+                                <label>Directions</label>
+                                <div class="checkbox">
+                                    <asp:CheckBoxList ID="cbDirections" runat="server" RepeatLayout="Table" required />
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group form-float">
+                            <div class="form-line">
+                                <label>Platform Affiliations</label>
                                 <div class="checkbox">
                                     <asp:CheckBoxList ID="cbAffiliations" runat="server" RepeatLayout="Table" required />
                                 </div>
@@ -38,16 +51,19 @@
                 </div>
             </div>
             <div class="col-lg-9">
-                <asp:ListView ID="lvAdvisers" runat="server">
+                <asp:ListView ID="lvAdvisers" runat="server" OnItemDataBound="lvAdvisers_ItemDataBound">
                     <ItemTemplate>
-                        <div class="col-lg-4 co-xs-12">
+                        <div class="col-lg-3 co-xs-12">
                             <div class="thumbnail">
                                 <a runat="server" href='<%# string.Concat("~/adviser?u=", Eval("AccountNo")) %>' target="_blank">
-                                    <img runat="server" src='<%# Eval("Image").ToString() == "" ? "~/images/user-placeholder.jpg" : string.Concat("~/image/users/", Eval("Image")) %>' /></a>
+                                    <div id="ratio" class="ratio" runat="server">
+                                    </div>
+                                    <asp:Literal ID="ltImage" runat="server" Visible="false" Text='<%# Eval("Image") %>' />
+                                </a>
                                 <div class="caption">
                                     <h3 class="text-center"><%# Eval("Name") %></h3>
                                     <hr />
-                                    <a href='<%# string.Concat("~/adviser?u=", Eval("AccountNo")) %>' target="_blank" class="btn btn-info btn-lg waves-effect">View Profile</a>
+                                    <a runat="server" href='<%# string.Concat("~/adviser?u=", Eval("AccountNo")) %>' target="_blank" class="btn btn-info btn-block btn-lg waves-effect">View Profile</a>
                                 </div>
                             </div>
                         </div>

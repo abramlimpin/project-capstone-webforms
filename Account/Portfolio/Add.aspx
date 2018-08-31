@@ -9,9 +9,6 @@
             <div class="col-lg-9">
                 <div class="card clearfix">
                     <div class="body">
-                        <div id="update" runat="server" class="alert alert-success" visible="false">
-                            Profile updated.
-                        </div>
                         <div class="form-group form-float">
                             <div class="form-line">
                                 <asp:TextBox ID="txtTitle" runat="server" CssClass="form-control" MaxLength="100" required />
@@ -23,38 +20,45 @@
                                 <asp:TextBox ID="txtDesc" runat="server" TextMode="MultiLine" MaxLength="500" required />
                             </div>
                         </div>
-                        <div class="form-group form-float">
+                        <div class="form-group">
                             <div class="form-line">
-                                <asp:TextBox ID="txtKeywords" runat="server" CssClass="form-control" MaxLength="100" />
                                 <label class="form-label">Keywords</label>
+                                <asp:TextBox ID="txtKeywords" runat="server" data-role="tagsinput" CssClass="form-control" MaxLength="100" />
                             </div>
                         </div>
-                       
-                        </div>
+
+                    </div>
                 </div>
                 <div class="card col-lg-6">
                     <div class="body">
-                         <h4>Specifications</h4>
-                             <table class="table">
+                        <h4>Specifications</h4>
+                        <table class="table">
                             <tr>
                                 <td>Typology</td>
-                                <td><asp:TextBox ID="txtTypology" runat="server" CssClass="form-control" /></td>
+                                <td>
+                                    <asp:TextBox ID="txtTypology" runat="server" CssClass="form-control" /></td>
                             </tr>
                             <tr>
                                 <td>Function</td>
-                                <td><asp:TextBox ID="txtFunction" runat="server" CssClass="form-control" /></td>
+                                <td>
+                                    <asp:TextBox ID="txtFunction" runat="server" CssClass="form-control" /></td>
                             </tr>
-                                 <tr>
+                            <tr>
                                 <td>Location</td>
-                                <td><asp:TextBox ID="txtLocation" runat="server" CssClass="form-control" /></td>
+                                <td>
+                                    <asp:TextBox ID="txtLocation" runat="server" CssClass="form-control" /></td>
                             </tr>
                             <tr>
-                                <td><asp:TextBox ID="txtCustom1" runat="server" CssClass="form-control" Text="Custom 1" /></td>
-                                <td><asp:TextBox ID="txtCustom1_Value" runat="server" CssClass="form-control" /></td>
+                                <td>
+                                    <asp:TextBox ID="txtCustom1" runat="server" CssClass="form-control" Text="Custom 1" /></td>
+                                <td>
+                                    <asp:TextBox ID="txtCustom1_Value" runat="server" CssClass="form-control" /></td>
                             </tr>
                             <tr>
-                                <td><asp:TextBox ID="txtCustom2" runat="server" CssClass="form-control" Text="Custom 2" /></td>
-                                <td><asp:TextBox ID="txtCustom2_Value" runat="server" CssClass="form-control" /></td>
+                                <td>
+                                    <asp:TextBox ID="txtCustom2" runat="server" CssClass="form-control" Text="Custom 2" /></td>
+                                <td>
+                                    <asp:TextBox ID="txtCustom2_Value" runat="server" CssClass="form-control" /></td>
                             </tr>
                         </table>
                     </div>
@@ -72,7 +76,7 @@
                         <div class="form-group">
                             <label class="form-label">Featured Image</label><br />
                             <div class="fileinput fileinput-new" data-provides="fileinput">
-                                <div class="fileinput-new thumbnail" style="width: 300px; height: 250px;">
+                                <div class="fileinput-new thumbnail" style="width: 200px; height: 200px;">
                                     <asp:Image ID="imgUser" runat="server" />
                                 </div>
                                 <div class="fileinput-preview fileinput-exists thumbnail" style="max-width: 200px; max-height: 150px;"></div>

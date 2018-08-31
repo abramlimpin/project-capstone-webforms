@@ -36,4 +36,22 @@ public partial class Users_Logs : System.Web.UI.Page
             }
         }
     }
+
+    protected void lvRecords_ItemDataBound(object sender, ListViewItemEventArgs e)
+    {
+        if (e.Item.ItemType == ListViewItemType.DataItem)
+        {
+            Literal ltDesc = (Literal)e.Item.FindControl("ltDesc");
+            Literal ltDesc_Enc = (Literal)e.Item.FindControl("ltDesc_Enc");
+
+            try
+            {
+                ltDesc.Text = Helper.Decrypt(ltDesc_Enc.Text);
+            }
+            catch
+            {
+                ltDesc.Text = "";
+            }
+        }
+    }
 }

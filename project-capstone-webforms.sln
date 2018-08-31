@@ -1,27 +1,26 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
-VisualStudioVersion = 15.0.27703.2026
+VisualStudioVersion = 15.0.28010.2016
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{E24C65DC-7377-472B-9ABA-BC803B73C61A}") = "project-capstone-webforms", ".", "{2C2664BF-1F60-4322-80BB-EEF8F8066B59}"
 	ProjectSection(WebsiteProperties) = preProject
 		TargetFrameworkMoniker = ".NETFramework,Version%3Dv4.0"
 		Debug.AspNetCompiler.VirtualPath = "/localhost_57777"
-		Debug.AspNetCompiler.PhysicalPath = "..\project-capstone-webforms\"
+		Debug.AspNetCompiler.PhysicalPath = "..\..\..\dev\project-capstone-webforms\"
 		Debug.AspNetCompiler.TargetPath = "PrecompiledWeb\localhost_57777\"
 		Debug.AspNetCompiler.Updateable = "true"
 		Debug.AspNetCompiler.ForceOverwrite = "true"
 		Debug.AspNetCompiler.FixedNames = "false"
 		Debug.AspNetCompiler.Debug = "True"
 		Release.AspNetCompiler.VirtualPath = "/localhost_57777"
-		Release.AspNetCompiler.PhysicalPath = "..\project-capstone-webforms\"
+		Release.AspNetCompiler.PhysicalPath = "..\..\..\dev\project-capstone-webforms\"
 		Release.AspNetCompiler.TargetPath = "PrecompiledWeb\localhost_57777\"
 		Release.AspNetCompiler.Updateable = "true"
 		Release.AspNetCompiler.ForceOverwrite = "true"
 		Release.AspNetCompiler.FixedNames = "false"
 		Release.AspNetCompiler.Debug = "False"
 		VWDPort = "57777"
-		SlnRelativePath = "..\project-capstone-webforms\"
 	EndProjectSection
 EndProject
 Global
@@ -36,6 +35,6 @@ Global
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
-		SolutionGuid = {A2C8A88E-0671-4CB6-A35E-DBC61FF8A6A3}
+		SolutionGuid = {F732CD3F-B890-4AA9-AA9B-E7A21279D521}
 	EndGlobalSection
 EndGlobal

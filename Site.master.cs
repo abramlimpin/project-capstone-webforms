@@ -14,9 +14,9 @@ public partial class Site : System.Web.UI.MasterPage
         {
             ToggleModules();
             ToggleMenu();
-            ToggleAdvising();
+            //ToggleAdvising();
             GetUser();
-            GetLogs();
+            //GetLogs();
         }
     }
 
@@ -44,6 +44,16 @@ public partial class Site : System.Web.UI.MasterPage
                     FROM Faculty f
                     INNER JOIN Account a ON f.AccountNo = a.AccountNo
                     WHERE a.AccountNo = @AccountNo";
+
+                    menu_advising.Visible = true;
+                }
+                else
+                {
+                    query = @"SELECT s.FirstName + ' ' + s.LastName AS Name, a.Email,
+                        s.Image
+                        FROM Students s
+                        INNER JOIN Account a ON s.AccountNo = a.AccountNo
+                        WHERE a.AccountNo = @AccountNo";
                 }
                 using (SqlCommand cmd = new SqlCommand(query, con))
                 {
@@ -121,6 +131,10 @@ public partial class Site : System.Web.UI.MasterPage
                 menu_home.Attributes.Add("class", "active");
             else if (Session["module"].ToString() == "Account")
                 menu_account.Attributes.Add("class", "active");
+            else if (Session["module"].ToString() == "Portfolio")
+                menu_portfolio.Attributes.Add("class", "active");
+            else if (Session["module"].ToString() == "Application")
+                menu_application.Attributes.Add("class", "active");
             else if (Session["module"].ToString() == "Advising")
                 menu_advising.Attributes.Add("class", "active");
             else if (Session["module"].ToString() == "Users")
@@ -157,6 +171,7 @@ public partial class Site : System.Web.UI.MasterPage
                 cmd.Parameters.AddWithValue("@AccountNo", Session["accountno"].ToString());
                 cmd.Parameters.AddWithValue("@Status", "Active");
                 menu_advising.Visible = cmd.ExecuteScalar() == null ? false : true;
+                menu_application.Visible = !menu_advising.Visible;
             }
         }
     }

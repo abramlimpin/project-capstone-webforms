@@ -12,7 +12,7 @@ public partial class Account_Porfolio_Add : System.Web.UI.Page
     protected void Page_Load(object sender, EventArgs e)
     {
         Helper.ValidateUser();
-        Session["module"] = "Account";
+        Session["module"] = "Portfolio";
         Session["page"] = "Add a Portfolio";
     }
 
