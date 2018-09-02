@@ -28,7 +28,8 @@
     { 
         Exception exc = Server.GetLastError();
         Helper.Log("Error", Server.HtmlEncode(exc.Message + " - " +
-            exc.InnerException.Message));
+            exc.InnerException.Message + ": " +
+            exc.ToString()));
     }
 
     void Session_Start(object sender, EventArgs e) 

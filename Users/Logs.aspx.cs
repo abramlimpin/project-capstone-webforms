@@ -10,6 +10,9 @@ public partial class Users_Logs : System.Web.UI.Page
 {
     protected void Page_Load(object sender, EventArgs e)
     {
+        Helper.ValidateUser();
+        Helper.ValidateAdmin();
+
         Session["module"] = "Admin";
         Session["page"] = "Audit Logs";
 
