@@ -54,6 +54,8 @@ public partial class Site : System.Web.UI.MasterPage
                         FROM Students s
                         INNER JOIN Account a ON s.AccountNo = a.AccountNo
                         WHERE a.AccountNo = @AccountNo";
+
+                    menu_application.Visible = true;
                 }
                 using (SqlCommand cmd = new SqlCommand(query, con))
                 {

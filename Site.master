@@ -274,10 +274,22 @@
                         </a>
                     </li>
                     <li id="menu_portfolio" runat="server">
-                        <a runat="server" href="~/Account/Portfolio">
+                        <a href="javascript:void(0);" class="menu-toggle">
                             <i class="material-icons">loyalty</i>
                             <span>My Portfolio</span>
                         </a>
+                        <ul class="ml-menu">
+                            <li>
+                                <a runat="server" href="~/Account/Portfolio">
+                                    <span>View List</span>
+                                </a>
+                            </li>
+                            <li>
+                                <a runat="server" href="~/Account/Portfolio/Add">
+                                    <span>Add a Record</span>
+                                </a>
+                            </li>
+                        </ul>
                     </li>
                     <li id="menu_application" runat="server" visible="false">
                         <a runat="server" href="~/Account/Application">
