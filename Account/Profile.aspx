@@ -78,6 +78,7 @@
                             </div>
                         </div>
                         <div class="form-group">
+                            <label class="form-label">Birthdate</label>
                             <div class="input-group">
                                 <span class="input-group-addon">
                                     <i class="material-icons">date_range</i>

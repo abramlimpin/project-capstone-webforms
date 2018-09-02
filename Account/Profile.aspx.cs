@@ -126,7 +126,7 @@ public partial class Account_Profile : System.Web.UI.Page
                 query = @"UPDATE Students SET Image=@Image, MiddleName=@MiddleName,
                     Nickname=@Nickname,
                     Birthdate=@Birthdate, DateModified=@DateModified
-                    WHERE AccountNo=@AccountNo";
+                    WHERE AccountNo=@AccountNo AND Status!='Archived'";
             }
             using (SqlCommand cmd = new SqlCommand(query, con))
             {
@@ -183,7 +183,7 @@ public partial class Account_Profile : System.Web.UI.Page
                     con.Open();
                     string query = @"UPDATE Account SET Password=@Password,
                         DateModified=@DateModified
-                        WHERE AccountNo=@AccountNo";
+                        WHERE AccountNo=@AccountNo AND Status!='Archived'";
                     using (SqlCommand cmd = new SqlCommand(query, con))
                     {
                         cmd.Parameters.AddWithValue("@Password", Helper.Hash(txtPassword_New.Text));
