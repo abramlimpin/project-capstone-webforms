@@ -32,6 +32,21 @@ public class Helper
         }
     }
 
+    public static void ValidateAdmin()
+    {
+        if (HttpContext.Current.Session["typeid"] == null)
+        {
+            HttpContext.Current.Response.Redirect("~/");
+        }
+        else
+        {
+            if (HttpContext.Current.Session["typeid"].ToString() != "1")
+            {
+                HttpContext.Current.Response.Redirect("~/");
+            }
+        }
+    }
+
     public static void Log(string logType, string desc)
     {
         using (SqlConnection con = new SqlConnection(Helper.GetCon()))
@@ -75,7 +90,7 @@ public class Helper
                 }
                 catch
                 {
-
+                    
                 }
             }
         }
@@ -97,7 +112,51 @@ public class Helper
         {
             MailClient.Send(emailMessage);
         }
-        catch { }
+        catch {
+            SendEmail2(email, subject, message);
+        }
+    }
+
+    public static void SendEmail2(string email, string subject, string message)
+    {
+        MailMessage emailMessage = new MailMessage();
+        emailMessage.From = new MailAddress("benildeproject.capstone.02@gmail.com", "no-reply");
+        emailMessage.To.Add(new MailAddress(email));
+        emailMessage.Subject = subject;
+        emailMessage.Body = message;
+        emailMessage.IsBodyHtml = true;
+        emailMessage.Priority = MailPriority.Normal;
+        SmtpClient MailClient = new SmtpClient("smtp.gmail.com", 587);
+        MailClient.EnableSsl = true;
+        MailClient.Credentials = new System.Net.NetworkCredential("benildeproject.capstone.02@gmail.com", "!thisisalongpassword1234567890");
+        try
+        {
+            MailClient.Send(emailMessage);
+        }
+        catch {
+            SendEmail3(email, subject, message);
+        }
+    }
+
+    public static void SendEmail3(string email, string subject, string message)
+    {
+        MailMessage emailMessage = new MailMessage();
+        emailMessage.From = new MailAddress("benildeproject.capstone.03@gmail.com", "no-reply");
+        emailMessage.To.Add(new MailAddress(email));
+        emailMessage.Subject = subject;
+        emailMessage.Body = message;
+        emailMessage.IsBodyHtml = true;
+        emailMessage.Priority = MailPriority.Normal;
+        SmtpClient MailClient = new SmtpClient("smtp.gmail.com", 587);
+        MailClient.EnableSsl = true;
+        MailClient.Credentials = new System.Net.NetworkCredential("benildeproject.capstone.03@gmail.com", "!thisisalongpassword1234567890");
+        try
+        {
+            MailClient.Send(emailMessage);
+        }
+        catch {
+
+        }
     }
 
     public static string Hash(string keyword)

@@ -17,16 +17,19 @@ public class DB
         //
     }
 
-    public static bool IsAccountExisting(string accountID)
+    public static bool IsAccountExisting(string accountID, string email)
     {
         using (SqlConnection con = new SqlConnection(Helper.GetCon()))
         {
             con.Open();
             string query = @"SELECT AccountNo FROM Account
-                WHERE AccountNo=@AccountNo";
+                WHERE AccountNo=@AccountNo AND Email=@Email
+                AND Status!=@Status";
             using (SqlCommand cmd = new SqlCommand(query, con))
             {
                 cmd.Parameters.AddWithValue("@AccountNo", accountID);
+                cmd.Parameters.AddWithValue("@Email", email);
+                cmd.Parameters.AddWithValue("@Status", "Archived");
                 return cmd.ExecuteScalar() == null ? false : true;
             }
         }
@@ -250,6 +253,24 @@ public class DB
                         return dt;
                     }
                 }
+            }
+        }
+    }
+
+
+    public static int TotalAdvisees()
+    {
+        using (SqlConnection con = new SqlConnection(Helper.GetCon()))
+        {
+            con.Open();
+            string query = @"SELECT COUNT(EnlistID) FROM Enlistment e
+                INNER JOIN Faculty f ON e.FacultyID = f.FacultyID
+                WHERE e.Status=@Status AND f.AccountNo=@AccountNo";
+            using (SqlCommand cmd = new SqlCommand(query, con))
+            {
+                cmd.Parameters.AddWithValue("@Status", "Approved");
+                cmd.Parameters.AddWithValue("@AccountNo", HttpContext.Current.Session["accountno"].ToString());
+                return (int)cmd.ExecuteScalar();
             }
         }
     }
