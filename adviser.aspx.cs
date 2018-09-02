@@ -13,6 +13,15 @@ public partial class adviser : System.Web.UI.Page
         Helper.ValidateUser();
         Session["module"] = "Directory";
 
+        if (Session["add"] != null)
+        {
+            add.Visible = true;
+            Session.Remove("add");
+        }
+        else
+        {
+            add.Visible = false;
+        }
         if (Request.QueryString["u"] == null)
         {
             Response.Redirect("~/");
@@ -46,7 +55,7 @@ public partial class adviser : System.Web.UI.Page
                 fa.Others
                 FROM Faculty f 
                 INNER JOIN Account a ON f.AccountNo = a.AccountNo
-                INNER JOIN Faculty_Advising fa ON f.FacultyID = fa.FacultyID
+                LEFT JOIN Faculty_Advising fa ON fa.FacultyID = f.FacultyID
                 WHERE f.AccountNo=@AccountNo AND f.Status=@Status";
             using (SqlCommand cmd = new SqlCommand(query, con))
             {
@@ -255,11 +264,13 @@ public partial class adviser : System.Web.UI.Page
             con.Open();
             string query = @"SELECT e.EnlistID FROM Enlistment e
                 INNER JOIN Students s ON e.AccountNo = s.AccountNo
-                WHERE s.AccountNo=@AccountNo AND e.FacultyID=@FacultyID";
+                WHERE s.AccountNo=@AccountNo AND e.FacultyID=@FacultyID
+                AND e.Status!=@Status";
             using (SqlCommand cmd = new SqlCommand(query, con))
             {
                 cmd.Parameters.AddWithValue("@AccountNo", Session["accountno"].ToString());
                 cmd.Parameters.AddWithValue("@FacultyID", facultyID);
+                cmd.Parameters.AddWithValue("@Status", "Archived");
                 return cmd.ExecuteScalar() == null ? false : true;
             }
         }
@@ -278,7 +289,7 @@ public partial class adviser : System.Web.UI.Page
             {
                 con.Open();
                 string query = @"INSERT INTO Enlistment VALUES
-                    (@AccountNo, @FacultyID, @DateAdded, @DateModified, @Status)";
+                    (@AccountNo, @FacultyID, @DateAdded, @DateModified, @Status, @Remarks)";
                 using (SqlCommand cmd = new SqlCommand(query, con))
                 {
                     cmd.Parameters.AddWithValue("@AccountNo", Session["accountno"].ToString());
@@ -286,9 +297,11 @@ public partial class adviser : System.Web.UI.Page
                     cmd.Parameters.AddWithValue("@DateAdded", DateTime.Now);
                     cmd.Parameters.AddWithValue("@DateModified", DBNull.Value);
                     cmd.Parameters.AddWithValue("@Status", "Active");
+                    cmd.Parameters.AddWithValue("@Remarks", "");
                     cmd.ExecuteNonQuery();
                     Helper.Log("Add", "Added enlistment record.");
-                    Response.Redirect("~/Account/Enlistment");
+                    Session["add"] = "yes";
+                    Response.Redirect("~/adviser?u=" + Request.QueryString["u"].ToString());
                 }
             }
         }

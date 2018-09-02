@@ -6,8 +6,11 @@
     <div class="row clearfix">
         <form runat="server" class="form-validate">
             <div class="col-lg-12">
-                <div id="error" runat="server" class="alert alert-danger">
-                    Adviser already selected.
+                <div id="error" runat="server" class="alert alert-danger" visible="false">
+                    Mentor already selected. <a runat="server" href="~/Account/Application">View application here.</a>
+                </div>
+                <div id="add" runat="server" class="alert alert-success" visible="false">
+                    Selected mentor. <a runat="server" href="~/Account/Application">View application here.</a>
                 </div>
             </div>
             <div class="col-lg-9">
