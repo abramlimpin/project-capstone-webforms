@@ -74,11 +74,43 @@
                 </div>
             </div>
         </asp:Panel>
+
     </div>
     <div class="row clearfix">
-        <div class="block-header">
-            <h3>Latest News</h3>
-        </div>
+        <asp:Panel ID="stat_enlistment" runat="server">
+            <div class="row"></div>
+            <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12">
+                <div class="card">
+                    <div class="header">
+                        <h2>Enlistment Summary</h2>
+                    </div>
+                    <div class="body">
+                        <table class="table table-hover">
+                            <thead>
+                                <th>Adviser</th>
+                                <th>ARCDES9</th>
+                                <th>ARCDS10</th>
+                            </thead>
+                            <tbody>
+                                <asp:ListView ID="lvRecords" runat="server">
+                                    <ItemTemplate>
+                                        <tr>
+                                            <td>
+                                                <a runat="server" href='<%# string.Concat("~/adviser?u=", Eval("AccountNo")) %>'>
+                                                    <%# Eval("Faculty") %>
+                                                </a>
+                                            </td>
+                                            <td><%# Eval("TotalCount_A") %></td>
+                                            <td><%# Eval("TotalCount_B") %></td>
+                                        </tr>
+                                    </ItemTemplate>
+                                </asp:ListView>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </asp:Panel>
         <asp:ListView ID="lvNews" runat="server">
             <ItemTemplate>
                 <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12">
