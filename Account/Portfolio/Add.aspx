@@ -75,6 +75,7 @@
                         </div>
                         <div class="form-group">
                             <label class="form-label">Featured Image</label><br />
+                            <small>File Size Limit: 5MB</small><br />
                             <div class="fileinput fileinput-new" data-provides="fileinput">
                                 <div class="fileinput-new thumbnail" style="width: 200px; height: 200px;">
                                     <asp:Image ID="imgUser" runat="server" />
@@ -115,6 +116,15 @@
             CKEDITOR.config.height = 300;
 
         });
+
+        var uploadField = document.getElementById("content_fuImage");
+
+        uploadField.onchange = function() {
+            if(this.files[0].size > 5242880){
+                alert("File is too big!");
+                this.value = "";
+            }
+        };
     </script>
 </asp:Content>
 
