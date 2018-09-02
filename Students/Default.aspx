@@ -30,6 +30,7 @@
                             <table class="table table-striped table-hover my-table dataTable">
                                 <thead>
                                     <tr>
+                                        <th></th>
                                         <th>Student #</th>
                                         <th>Name</th>
                                         <th>Email Address</th>
@@ -41,6 +42,7 @@
                                 </thead>
                                 <tfoot>
                                     <tr>
+                                        <th></th>
                                         <th>Student #</th>
                                         <th>Name</th>
                                         <th>Email Address</th>
@@ -54,8 +56,12 @@
                                     <asp:ListView ID="lvStudents" runat="server" OnItemCommand="lvStudents_ItemCommand">
                                         <ItemTemplate>
                                             <tr>
+                                                <td>
+                                                    <img runat="server" src='<%# Eval("Image").ToString() == "" ? string.Concat("~/images/user-placeholder.jpg") : string.Concat("~/images/users/", Eval("Image").ToString()) %>' width="100" />
+                                                </td>
                                                 <td><a class="link" href='Details?no=<%# Eval("Code") %>'>
                                                     <asp:Literal ID="ltAccountNo" runat="server" Text='<%# Eval("AccountNo") %>' />
+                                                    <asp:Literal ID="ltCode" runat="server" Text='<%# Eval("Code") %>' Visible="false" />
                                                     </a></td>
                                                 <td><%# Eval("Name") %></td>
                                                 <td><asp:Literal ID="ltEmail" runat="server" Text='<%# Eval("Email") %>' /></td>
@@ -68,6 +74,11 @@
                                                         ToolTip="Activate Account" OnClientClick='return confirm("Activate account?");'
                                                         CommandName="activate">
                                                     <i class="material-icons">lock_open</i>
+                                                    </asp:LinkButton>
+                                                    <asp:LinkButton ID="btnArchive" runat="server" CssClass="btn btn-xs btn-danger" 
+                                                        ToolTip="Remove Account" OnClientClick='return confirm("Remove account?");'
+                                                        CommandName="remove">
+                                                    <i class="material-icons">delete_forever</i>
                                                     </asp:LinkButton>
                                                 </td>
                                             </tr>

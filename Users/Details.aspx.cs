@@ -11,6 +11,7 @@ public partial class Users_Details : System.Web.UI.Page
     protected void Page_Load(object sender, EventArgs e)
     {
         Helper.ValidateUser();
+        Helper.ValidateAdmin();
         Session["module"] = "Users";
         Session["page"] = "User Details";
 

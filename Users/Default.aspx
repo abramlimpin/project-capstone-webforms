@@ -71,6 +71,11 @@
                                                         CommandName="reset">
                                                     <i class="material-icons">lock_open</i>
                                                     </asp:LinkButton>
+                                                <asp:LinkButton ID="btnArchive" runat="server" CssClass="btn btn-xs btn-danger" 
+                                                        ToolTip="Remove Account" Visible='<%# Eval("UserType").ToString() == "Student" ? true : false %>' OnClientClick='return confirm("Remove account?");'
+                                                        CommandName="remove">
+                                                    <i class="material-icons">delete_forever</i>
+                                                    </asp:LinkButton>
                                             </td>
                                         </tr>
                                     </ItemTemplate>

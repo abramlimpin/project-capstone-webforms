@@ -11,6 +11,7 @@ public partial class Users_Add : System.Web.UI.Page
     protected void Page_Load(object sender, EventArgs e)
     {
         Helper.ValidateUser();
+        Helper.ValidateAdmin();
         Session["module"] = "Users";
         Session["page"] = "Add a User";
 
@@ -41,7 +42,7 @@ public partial class Users_Add : System.Web.UI.Page
 
     protected void btnAdd_Click(object sender, EventArgs e)
     {
-        if (DB.IsAccountExisting(txtUsername.Text))
+        if (DB.IsAccountExisting(txtUsername.Text, txtEmail.Text))
         {
             error.Visible = true;
         }

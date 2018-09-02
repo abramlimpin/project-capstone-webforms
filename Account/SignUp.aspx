@@ -43,6 +43,9 @@
                             <div id="error" runat="server" class="alert alert-danger" visible="false">
                                 Account Name already existing.
                             </div>
+                            <div id="email" runat="server" class="alert alert-danger" visible="false">
+                                Incorrect email format.
+                            </div>
                             <div class="input-group">
                                 <span class="input-group-addon">
                                     <i class="material-icons">person</i>
@@ -72,24 +75,7 @@
                                     <i class="material-icons">email</i>
                                 </span>
                                 <div class="form-line">
-                                    <asp:TextBox ID="txtEmail" runat="server" CssClass="form-control" placeholder="Email Address" pattern="^[A-Za-z0-9._%+-]+@benilde.edu.ph$" MaxLength="100" required />
-                                </div>
-                            </div>
-                            <div class="input-group">
-                                <span class="input-group-addon">
-                                    <i class="material-icons">lock</i>
-                                </span>
-                                <div class="form-line">
-                                    <asp:TextBox ID="txtPassword" runat="server" TextMode="Password" CssClass="form-control" placeholder="Password" required />
-                                </div>
-                            </div>
-                            <div class="input-group">
-                                <span class="input-group-addon">
-                                    <i class="material-icons">lock</i>
-                                </span>
-                                <div class="form-line">
-                                    <asp:TextBox ID="txtPassword_Confirm" runat="server" TextMode="Password" CssClass="form-control" placeholder="Confirm Password" required />
-                                    <asp:CompareValidator ID="cv_Password" runat="server" SetFocusOnError="true" ControlToValidate="txtPassword_Confirm" ControlToCompare="txtPassword" />
+                                    <asp:TextBox ID="txtEmail" runat="server" CssClass="form-control" placeholder="Benilde Email Address" pattern="^[A-Za-z0-9._%+-]+@benilde.edu.ph$" MaxLength="100" required />
                                 </div>
                             </div>
                             <div class="form-group">

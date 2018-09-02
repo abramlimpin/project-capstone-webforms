@@ -62,14 +62,14 @@ public partial class Account_Activate : System.Web.UI.Page
                 WHERE Code=@Code;
                 UPDATE s SET s.DateModified=@DateModified, s.Status=@Status
                 FROM Students s
-                INNER JOIN Account a ON s.AccountNo = s.AccountNo
-                WHERE a.Code=@Code;
+                WHERE s.AccountNo=@AccountNo;
                 SELECT Email FROM Account WHERE Code=@Code";
             using (SqlCommand cmd = new SqlCommand(query, con))
             {
                 cmd.Parameters.AddWithValue("@DateActivated", DateTime.Now);
                 cmd.Parameters.AddWithValue("@DateModified", DateTime.Now);
                 cmd.Parameters.AddWithValue("@Code", code);
+                cmd.Parameters.AddWithValue("@AccountNo", Session["studentno"].ToString());
                 cmd.Parameters.AddWithValue("@Status", "Pending");
                 string email = (string)cmd.ExecuteScalar();
                 Helper.Log(Session["studentno"].ToString(), "Account", "Activated account.");
