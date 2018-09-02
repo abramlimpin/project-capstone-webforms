@@ -32,7 +32,7 @@ public partial class Faculty_Add : System.Web.UI.Page
 
     protected void btnAdd_Click(object sender, EventArgs e)
     {
-        if (DB.IsAccountExisting(txtUsername.Text))
+        if (DB.IsAccountExisting(txtUsername.Text, txtEmail.Text))
         {
             error.Visible = true;
         }

@@ -31,6 +31,7 @@
                         <table class="table table-striped table-hover my-table dataTable">
                             <thead>
                                 <tr>
+                                    <th></th>
                                     <th>Account #</th>
                                     <th>Name</th>
                                     <th>Email Address</th>
@@ -42,6 +43,7 @@
                             </thead>
                             <tfoot>
                                 <tr>
+                                    <th></th>
                                     <th>Account #</th>
                                     <th>Name</th>
                                     <th>Email Address</th>
@@ -55,6 +57,9 @@
                                 <asp:ListView ID="lvRecords" runat="server">
                                     <ItemTemplate>
                                         <tr>
+                                            <td>
+                                                <img runat="server" src='<%# Eval("Image").ToString() == "" ? string.Concat("~/images/user-placeholder.jpg") : string.Concat("~/images/users/", Eval("Image").ToString()) %>' width="100" />
+                                            </td>
                                             <td><a class="link" href='Details?no=<%# Eval("Code") %>'><%# Eval("AccountNo") %></a></td>
                                             <td><%# Eval("Name") %></td>
                                             <td><%# Eval("Email") %></td>

@@ -26,7 +26,7 @@ public partial class Faculty_Default : System.Web.UI.Page
         {
             con.Open();
             string query = @"SELECT a.Code, a.AccountNo, f.LastName + ', ' + f.FirstName AS Name,
-                a.Email, p.Name AS Program,
+                a.Email, p.Name AS Program, f.Image,
                 a.DateAdded, a.DateModified, a.Status
                 FROM Account a 
                 INNER JOIN Faculty f ON a.AccountNo = f.AccountNo
